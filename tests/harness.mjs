@@ -73,7 +73,7 @@ export function load(localStorageRaw = null) {
     tokenize, parse, compile, evalAst, collectVars,
     generateRows, syncVarNames, defaultName, makeTable,
     loadState, saveState, tableToText, renameInExpr, escapeRegExp,
-    APP_VERSION, CHANGELOG, renderChangelog,
+    APP_VERSION, CHANGELOG, renderChangelog, gradeColumn, makeColumn,
     getState: () => state,
   };`;
 

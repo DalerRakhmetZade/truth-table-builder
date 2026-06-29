@@ -163,6 +163,7 @@
   .col-head .expr-input.invalid { border-color: var(--err); color: #b02a42; }
   .col-head .head-row { display: flex; gap: 6px; align-items: center; justify-content: center; }
   .col-head .meta { font-size: 11px; color: var(--muted); min-height: 14px; }
+  .col-head .meta:empty { min-height: 0; display: none; }
   .col-head .meta.error { color: var(--err); }
   .col-head .meta.overridden { color: var(--accent-2); }
   .col-head .remove {
@@ -305,3 +306,101 @@
   .changelog ul { margin: 0; padding-left: 18px; }
   .changelog li { font-size: 13px; margin: 3px 0; }
   .about-credit { margin: 16px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+
+  /* ----- practice mode ----- */
+  .practice-controls {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  /* segmented Auto | Practice switch */
+  .seg {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--panel-2);
+  }
+  .seg-btn {
+    font-size: 11px;
+    padding: 3px 12px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .seg-btn + .seg-btn { border-left: 1px solid var(--line); }
+  .seg-btn:hover { color: var(--text); }
+  .seg-btn.active {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+  }
+  .mini {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--accent-2);
+    color: #fff;
+    cursor: pointer;
+  }
+  .mini.ghost { background: transparent; color: var(--muted); }
+  .mini:hover { filter: brightness(1.05); }
+  .mini.ghost:hover { border-color: var(--accent); color: var(--text); }
+
+  .coach {
+    margin-top: 6px;
+    min-height: 14px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+  }
+  .coach.ok { color: var(--true); font-weight: 700; }
+  .coach.warn { color: var(--false); font-weight: 600; }
+  .coach.info { color: var(--accent); font-weight: 600; }
+
+  /* practice cells: correctness is shown by a ring + ✓/✗ badge, NOT by the
+     T/F text color (an F is already red, so red must not also mean "wrong"). */
+  td.prac-cell { padding: 0; position: relative; }
+  .practice-input {
+    width: 100%;
+    min-width: 46px;
+    box-sizing: border-box;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 9px 6px;
+    color: var(--text);
+    text-transform: uppercase;
+    outline: none;
+  }
+  .practice-input:focus { background: rgba(108,123,255,0.08); }
+  .mark {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    pointer-events: none;
+  }
+  td.prac-cell.correct {
+    background: rgba(15,157,99,0.14);
+    box-shadow: inset 0 0 0 2px var(--true);
+  }
+  td.prac-cell.correct .mark::after { content: "\2713"; color: var(--true); }
+  td.prac-cell.incorrect {
+    background: rgba(216,58,85,0.14);
+    box-shadow: inset 0 0 0 2px var(--false);
+  }
+  td.prac-cell.incorrect .mark::after { content: "\2717"; color: var(--false); }
+  td.prac-cell.revealed {
+    background: rgba(89,101,240,0.12);
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+  td.prac-cell.revealed .mark::after { content: "\2605"; color: var(--accent); }

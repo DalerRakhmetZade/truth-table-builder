@@ -16,10 +16,22 @@ const DEFAULT_VAR_NAMES = ["p","q","r","s","t","u","v","w","x","y","z","a","b","
 const STORAGE_KEY = "truthTableBuilder.v1";
 
 /* ------------------------------ version / about -------------------------- */
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.1.0";
 // Version history (newest first). Single source of truth for the About dialog;
 // mirrored in CHANGELOG.md. Each entry: { version, date (YYYY-MM-DD), changes[] }.
 const CHANGELOG = [
+  {
+    version: "1.1.0",
+    date: "2026-06-29",
+    changes: [
+      "New: Practice mode — fill in a column's T/F values yourself, then Check your answers.",
+      "Auto / Practice switch per column; new columns start in Practice so answers aren't revealed.",
+      "Check grades your guesses (✓ / ✗ with a ring) and shows a summary like “6/8 correct”.",
+      "Reveal answers button fills in the correct values when you want to see them.",
+      "Cells accept only T or F (lowercase is auto-capitalized on Check), with a hint if you type anything else.",
+      "Credited CSCI S-20 in the About dialog.",
+    ],
+  },
   {
     version: "1.0.0",
     date: "2026-06-29",
@@ -61,6 +73,11 @@ function makeTable(title) {
     varNames: syncVarNames([], 2),
     columns: [],
   };
+}
+
+// New columns default to Practice mode so the answer is never auto-revealed.
+function makeColumn() {
+  return { id: nextColId++, expr: "", cells: {}, overridden: false, practice: true, results: {} };
 }
 
 let state = loadState() || { tables: [makeTable("Table 1")] };
@@ -320,16 +337,38 @@ function renderTable(table) {
   });
   table.columns.forEach((col) => {
     const cls = col.error ? "expr-input invalid" : "expr-input";
-    let meta = "&nbsp;", metaCls = "meta";
-    if (col.error) { meta = escapeHtml(col.error); metaCls = "meta error"; }
-    else if (col.overridden) { meta = "manual"; metaCls = "meta overridden"; }
-    else if (col.compiled) { meta = "auto"; metaCls = "meta"; }
+    let metaCls = "meta", metaTxt = "";
+    if (col.error) { metaCls = "meta error"; metaTxt = escapeHtml(col.error); }
+    else if (col.overridden) { metaCls = "meta overridden"; metaTxt = "manual"; }
+
+    let controls = "";
+    if (col.compiled) {
+      const on = !!col.practice;
+      controls = '<div class="practice-controls">' +
+        '<div class="seg" role="group" aria-label="Column mode">' +
+          '<button class="seg-btn' + (on ? "" : " active") + '" data-action="setmode" data-mode="auto" ' +
+            'data-table="' + tid + '" data-col="' + col.id + '" title="Auto-fill the column">Auto</button>' +
+          '<button class="seg-btn' + (on ? " active" : "") + '" data-action="setmode" data-mode="practice" ' +
+            'data-table="' + tid + '" data-col="' + col.id + '" title="Fill it in yourself, then check">Practice</button>' +
+        '</div>';
+      if (on) {
+        controls += '<button class="mini" data-action="check" data-table="' + tid + '" data-col="' + col.id + '">Check</button>' +
+          '<button class="mini ghost" data-action="reveal" data-table="' + tid + '" data-col="' + col.id + '">Reveal</button>';
+      }
+      controls += "</div>";
+    }
+    const coach = col.compiled && col.practice
+      ? '<div class="coach ' + (col.summaryKind || "") + '" data-table="' + tid + '" data-col="' + col.id + '">' +
+          (col.summary || "&nbsp;") + "</div>"
+      : "";
+
     h += '<th><div class="col-head"><div class="head-row">' +
           '<input type="text" class="' + cls + '" data-table="' + tid + '" data-col="' + col.id + '" ' +
             'value="' + escapeAttr(col.expr || "") + '" placeholder="expr or blank" />' +
           '<button class="remove" data-table="' + tid + '" data-remove="' + col.id + '" ' +
             'title="Remove column">✕</button>' +
-          '</div><div class="' + metaCls + '">' + meta + '</div></div></th>';
+          '</div><div class="' + metaCls + '">' + metaTxt + '</div>' +
+          controls + coach + '</div></th>';
   });
   h += "</tr></thead><tbody>";
 
@@ -341,21 +380,34 @@ function renderTable(table) {
            (val ? "T" : "F") + "</span></td>";
     });
     table.columns.forEach((col) => {
-      let display = "", cls = "";
-      if (col.compiled && !col.overridden) {
+      const isAuto = col.compiled && !col.overridden && !col.practice;
+      const isPractice = col.compiled && col.practice;
+      if (isAuto) {
+        let display = "", cls = "";
         try {
           const val = evalAst(col.compiled.ast, row);
           display = val ? "T" : "F"; cls = val ? "t" : "f";
         } catch (e) { display = ""; }
+        h += '<td class="' + cls + '" data-table="' + tid + '" data-col="' + col.id + '" ' +
+             'data-row="' + ri + '" data-editable="0"><span class="cell">' + display + "</span></td>";
+      } else if (isPractice) {
+        const guess = col.cells && col.cells[ri] ? String(col.cells[ri]) : "";
+        const res = col.results ? col.results[ri] : undefined;
+        const resCls = res === "correct" ? " correct" : res === "incorrect" ? " incorrect"
+                     : res === "revealed" ? " revealed" : "";
+        h += '<td class="prac-cell' + resCls + '" data-table="' + tid + '" data-col="' + col.id + '" ' +
+             'data-row="' + ri + '" data-editable="0">' +
+             '<input class="practice-input" maxlength="1" autocomplete="off" spellcheck="false" ' +
+               'aria-label="T or F" data-table="' + tid + '" data-col="' + col.id + '" data-row="' + ri + '" ' +
+               'value="' + escapeAttr(guess) + '" /><span class="mark" aria-hidden="true"></span></td>';
       } else {
+        let display = "", cls = "";
         const stored = col.cells ? col.cells[ri] : undefined;
         if (stored === "T") { display = "T"; cls = "t"; }
         else if (stored === "F") { display = "F"; cls = "f"; }
+        h += '<td class="' + cls + '" data-table="' + tid + '" data-col="' + col.id + '" ' +
+             'data-row="' + ri + '" data-editable="1"><span class="cell">' + display + "</span></td>";
       }
-      const editable = !(col.compiled && !col.overridden);
-      h += '<td class="' + cls + '" data-table="' + tid + '" data-col="' + col.id + '" ' +
-           'data-row="' + ri + '" data-editable="' + (editable ? "1" : "0") + '">' +
-           '<span class="cell">' + display + "</span></td>";
     });
     h += "</tr>";
   });
@@ -377,6 +429,20 @@ function escapeAttr(s) {
   return String(s).replace(/[&"<>]/g, (c) => ({ "&": "&amp;", '"': "&quot;", "<": "&lt;", ">": "&gt;" }[c]));
 }
 function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+// Grade typed guesses in a practice column against the correct expression values.
+// Returns counts and a per-row result map ('correct' | 'incorrect' | 'blank').
+function gradeColumn(compiledAst, rows, cells) {
+  let correct = 0, incorrect = 0, blank = 0;
+  const results = {};
+  rows.forEach((row, ri) => {
+    const want = evalAst(compiledAst, row) ? "T" : "F";
+    const guess = cells && cells[ri] ? String(cells[ri]).toUpperCase() : "";
+    if (!guess) { blank++; results[ri] = "blank"; }
+    else if (guess === want) { correct++; results[ri] = "correct"; }
+    else { incorrect++; results[ri] = "incorrect"; }
+  });
+  return { correct, incorrect, blank, total: rows.length, results };
+}
 // Replace whole-identifier occurrences of oldName with newName in an expression.
 function renameInExpr(expr, oldName, newName) {
   if (!expr) return expr;
@@ -401,8 +467,10 @@ tablesEl.addEventListener("click", (e) => {
   render();
 });
 
-// expression typing + live title editing
+// expression typing + live title editing + practice-cell entry
 tablesEl.addEventListener("input", (e) => {
+  const pcell = e.target.closest("input.practice-input");
+  if (pcell) { handlePracticeInput(pcell); return; }
   const title = e.target.closest("input.title-input");
   if (title) {
     const table = getTable(title.dataset.table);
@@ -418,6 +486,77 @@ tablesEl.addEventListener("input", (e) => {
   liveUpdateColumn(table, col, input);
   saveState();
 });
+
+function coachEl(table, col) {
+  return tablesEl.querySelector('.coach[data-table="' + table.id + '"][data-col="' + col.id + '"]');
+}
+function setCoach(table, col, msg, kind) {
+  col.summary = msg || "";
+  col.summaryKind = kind || "";
+  const el = coachEl(table, col);
+  if (el) { el.innerHTML = msg ? escapeHtml(msg) : "&nbsp;"; el.className = "coach " + (kind || ""); }
+}
+
+// Restrict practice cells to T/F (t/f allowed); coach on anything else.
+function handlePracticeInput(input) {
+  const table = getTable(input.dataset.table); if (!table) return;
+  const col = getCol(table, input.dataset.col); if (!col) return;
+  const ri = Number(input.dataset.row);
+  col.cells = col.cells || {};
+  let v = input.value;
+  if (v.length > 1) v = v.slice(-1); // keep only the most recent character
+
+  if (v === "") {
+    delete col.cells[ri];
+    input.value = "";
+    setCoach(table, col, "", "");
+  } else if (/^[tTfF]$/.test(v)) {
+    col.cells[ri] = v; // keep case until Check uppercases it
+    input.value = v;
+    setCoach(table, col, "", "");
+  } else {
+    input.value = col.cells[ri] || ""; // reject the invalid character
+    setCoach(table, col, "Only T or F allowed.", "warn");
+  }
+  // editing a cell clears its previous check result/color
+  if (col.results) delete col.results[ri];
+  const td = input.closest("td");
+  if (td) td.classList.remove("correct", "incorrect", "revealed");
+  saveState();
+}
+
+function handleCheck(table, col) {
+  if (!col || !col.compiled) return;
+  const rows = generateRows(table.varNames);
+  col.cells = col.cells || {};
+  Object.keys(col.cells).forEach((k) => {
+    if (col.cells[k]) col.cells[k] = String(col.cells[k]).toUpperCase();
+  });
+  const g = gradeColumn(col.compiled.ast, rows, col.cells);
+  col.results = g.results;
+  if (g.incorrect === 0 && g.blank === 0) {
+    col.summary = "All " + g.total + " correct! 🎉"; col.summaryKind = "ok";
+  } else {
+    col.summary = g.correct + "/" + g.total + " correct" +
+      (g.incorrect ? " · " + g.incorrect + " to fix" : "") +
+      (g.blank ? " · " + g.blank + " blank" : "");
+    col.summaryKind = g.incorrect ? "warn" : "info";
+  }
+  render();
+}
+
+function handleReveal(table, col) {
+  if (!col || !col.compiled) return;
+  const rows = generateRows(table.varNames);
+  col.cells = col.cells || {};
+  col.results = {};
+  rows.forEach((row, ri) => {
+    col.cells[ri] = evalAst(col.compiled.ast, row) ? "T" : "F";
+    col.results[ri] = "revealed";
+  });
+  col.summary = "Answers revealed."; col.summaryKind = "info";
+  render();
+}
 
 tablesEl.addEventListener("focusin", (e) => {
   const input = e.target.closest("input.expr-input");
@@ -440,8 +579,12 @@ function liveUpdateColumn(table, col, input) {
   input.classList.toggle("invalid", !!error);
   const meta = input.closest(".col-head").querySelector(".meta");
   if (error) { meta.textContent = error; meta.className = "meta error"; }
-  else if (compiled) { meta.textContent = "auto"; meta.className = "meta"; }
-  else { meta.innerHTML = "&nbsp;"; meta.className = "meta"; }
+  else { meta.textContent = ""; meta.className = "meta"; }
+
+  // Never reveal answers while a column is in practice mode. The full render on
+  // blur lays out the (empty) practice cells; here we just avoid live-filling.
+  if (col.practice) return;
+
   const tds = tablesEl.querySelectorAll('td[data-table="' + table.id + '"][data-col="' + col.id + '"]');
   tds.forEach((td) => {
     const ri = Number(td.dataset.row);
@@ -494,12 +637,14 @@ tablesEl.addEventListener("click", (e) => {
   const table = getTable(btn.dataset.table); if (!table) return;
   const act = btn.dataset.action;
   if (act === "addcol") {
-    table.columns.push({ id: nextColId++, expr: "", cells: {}, overridden: false });
+    table.columns.push(makeColumn());
     render();
     const inputs = tablesEl.querySelectorAll('input.expr-input[data-table="' + table.id + '"]');
     if (inputs.length) inputs[inputs.length - 1].focus();
   } else if (act === "clear") {
-    table.columns.forEach((c) => { c.cells = {}; c.overridden = false; });
+    table.columns.forEach((c) => {
+      c.cells = {}; c.overridden = false; c.results = {}; c.summary = ""; c.summaryKind = "";
+    });
     render();
   } else if (act === "copy") {
     copyTableText(table, btn);
@@ -508,6 +653,18 @@ tablesEl.addEventListener("click", (e) => {
     state.tables = state.tables.filter((t) => t.id !== table.id);
     if (state.tables.length === 0) state.tables.push(makeTable("Table 1"));
     render();
+  } else if (act === "setmode") {
+    const col = getCol(table, btn.dataset.col); if (!col) return;
+    const wantPractice = btn.dataset.mode === "practice";
+    if (!!col.practice === wantPractice) return;
+    col.practice = wantPractice;
+    col.results = {};
+    col.summary = ""; col.summaryKind = "";
+    render();
+  } else if (act === "check") {
+    handleCheck(table, getCol(table, btn.dataset.col));
+  } else if (act === "reveal") {
+    handleReveal(table, getCol(table, btn.dataset.col));
   }
 });
 
@@ -623,10 +780,10 @@ function tableToText(table) {
     table.columns.forEach((col, ci) => {
       let cell = "";
       const comp = compiledCols[ci];
-      if (comp && !col.overridden) {
+      if (comp && !col.overridden && !col.practice) {
         try { cell = evalAst(comp.ast, row) ? "T" : "F"; } catch (e) { cell = ""; }
       } else if (col.cells && col.cells[ri]) {
-        cell = col.cells[ri];
+        cell = String(col.cells[ri]).toUpperCase();
       }
       line.push(cell);
     });
