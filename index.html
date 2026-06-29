@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Truth Table Builder</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="app">
+  <h1>Truth Table Builder</h1>
+  <p>Set the variables, add expression columns, click cells to toggle, or type a proposition to auto-fill it.</p>
+</header>
+
+<div class="controls">
+  <div class="group">
+    <button id="addTable" class="primary">+ Add table</button>
+    <button id="resetAll" class="ghost">Reset all</button>
+  </div>
+  <div class="sep"></div>
+  <div class="group">
+    <span class="hint">Insert symbol</span>
+  </div>
+  <div class="group symbols" id="symbols">
+    <button data-sym="¬" title="NOT (~ !)">¬<span class="key">~</span></button>
+    <button data-sym="∧" title="AND (& *)">∧<span class="key">&</span></button>
+    <button data-sym="∨" title="OR (|)">∨<span class="key">|</span></button>
+    <button data-sym="⊕" title="XOR (^)">⊕<span class="key">^</span></button>
+    <button data-sym="→" title="IMPLIES (->)">→<span class="key">-&gt;</span></button>
+    <button data-sym="↔" title="IFF (<->)">↔<span class="key">&lt;-&gt;</span></button>
+    <button data-sym="(" title="open paren">(</button>
+    <button data-sym=")" title="close paren">)</button>
+  </div>
+</div>
+
+<p class="warn" id="warn"></p>
+
+<div id="tables"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
