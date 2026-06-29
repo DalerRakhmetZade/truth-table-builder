@@ -2,10 +2,26 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.2.0";
+export const APP_VERSION = "1.3.0";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.3.0",
+    date: "2026-06-29",
+    changes: [
+      "Fresh look: a calmer, Apple-inspired light design across the whole app.",
+      "Type “/” inside a formula to pick a symbol — filter by typing, navigate with ↑/↓, Enter to insert.",
+      "Friendlier formula error messages that point at the problem, shown only after you finish typing.",
+      "Operator buttons now have tooltips (NOT, AND, OR, XOR, IMPLIES, IFF).",
+      "Removing a table or a column now asks for confirmation, using an in-app dialog (no browser pop-ups).",
+      "Reorder tables with up/down arrows when you have more than one.",
+      "You can now delete the last remaining table.",
+      "Removed the per-table Clear button — remove individual columns with their ✕ instead.",
+      "The “What's new” list is now collapsible by version.",
+      "Wider layout so larger tables have more room.",
+    ],
+  },
   {
     version: "1.2.0",
     date: "2026-06-29",
@@ -45,13 +61,13 @@ export const CHANGELOG = [
 ];
 
 export function renderChangelog(entries) {
-  return entries.map((rel) =>
-    '<div class="release">' +
-      '<div class="release-head">' +
+  return entries.map((rel, i) =>
+    '<details class="release"' + (i === 0 ? " open" : "") + '>' +
+      '<summary class="release-head">' +
         '<span class="release-ver">v' + escapeHtml(rel.version) + '</span>' +
         '<span class="release-date">' + escapeHtml(rel.date) + '</span>' +
-      '</div><ul>' +
+      '</summary><ul>' +
       rel.changes.map((c) => "<li>" + escapeHtml(c) + "</li>").join("") +
-      "</ul></div>"
+      "</ul></details>"
   ).join("");
 }

@@ -1,6 +1,4 @@
 /* Practice mode: Auto/Practice switch, cells, badges, coach */
-
-  /* ----- practice mode ----- */
   .practice-controls {
     display: flex;
     gap: 6px;
@@ -8,55 +6,58 @@
     justify-content: center;
     flex-wrap: wrap;
   }
-  /* segmented Auto | Practice switch */
+  /* segmented Auto | Practice switch (calm pill, Signal Blue active) */
   .seg {
     display: inline-flex;
-    border: 1px solid var(--line);
-    border-radius: 999px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-pill);
     overflow: hidden;
-    background: var(--panel-2);
+    background: var(--paper);
   }
   .seg-btn {
     font-size: 11px;
     padding: 3px 12px;
     border: none;
     background: transparent;
-    color: var(--muted);
+    color: var(--fog);
     cursor: pointer;
+    font-family: inherit;
   }
-  .seg-btn + .seg-btn { border-left: 1px solid var(--line); }
-  .seg-btn:hover { color: var(--text); }
+  .seg-btn + .seg-btn { border-left: 1px solid var(--hairline); }
+  .seg-btn:hover { color: var(--ink); }
   .seg-btn.active {
-    background: var(--accent);
+    background: var(--signal-blue);
     color: #fff;
     font-weight: 700;
   }
+  /* Check = the one primary (blue); Reveal = quiet */
   .mini {
     font-size: 11px;
-    padding: 3px 9px;
-    border-radius: 6px;
-    border: 1px solid var(--line);
-    background: var(--accent-2);
+    padding: 3px 10px;
+    border-radius: var(--radius-control);
+    border: 1px solid var(--signal-blue);
+    background: var(--signal-blue);
     color: #fff;
     cursor: pointer;
+    font-family: inherit;
   }
-  .mini.ghost { background: transparent; color: var(--muted); }
-  .mini:hover { filter: brightness(1.05); }
-  .mini.ghost:hover { border-color: var(--accent); color: var(--text); }
+  .mini:hover { background: var(--signal-blue-deep); border-color: var(--signal-blue-deep); }
+  .mini.ghost { background: transparent; color: var(--ash); border-color: var(--hairline); }
+  .mini.ghost:hover { background: var(--paper); border-color: var(--silver); color: var(--ink); }
 
   .coach {
     margin-top: 6px;
     min-height: 14px;
     font-size: 11px;
-    color: var(--muted);
+    color: var(--fog);
     text-align: center;
   }
   .coach.ok { color: var(--true); font-weight: 700; }
   .coach.warn { color: var(--false); font-weight: 600; }
-  .coach.info { color: var(--accent); font-weight: 600; }
+  .coach.info { color: var(--signal-blue); font-weight: 600; }
 
-  /* practice cells: correctness is shown by a ring + ✓/✗ badge, NOT by the
-     T/F text color (an F is already red, so red must not also mean "wrong"). */
+  /* correctness shown by a ring + ✓/✗ badge, NOT by the T/F text color
+     (an F is already red, so red must not also mean "wrong"). */
   td.prac-cell { padding: 0; position: relative; }
   .practice-input {
     width: 100%;
@@ -68,11 +69,12 @@
     font-size: 15px;
     font-weight: 700;
     padding: 9px 6px;
-    color: var(--text);
+    color: var(--ink);
     text-transform: uppercase;
     outline: none;
+    font-family: inherit;
   }
-  .practice-input:focus { background: rgba(108,123,255,0.08); }
+  .practice-input:focus { background: rgba(37, 118, 235, 0.07); }
   .mark {
     position: absolute;
     top: 2px;
@@ -83,17 +85,17 @@
     pointer-events: none;
   }
   td.prac-cell.correct {
-    background: rgba(15,157,99,0.14);
+    background: var(--true-bg);
     box-shadow: inset 0 0 0 2px var(--true);
   }
   td.prac-cell.correct .mark::after { content: "\2713"; color: var(--true); }
   td.prac-cell.incorrect {
-    background: rgba(216,58,85,0.14);
+    background: var(--false-bg);
     box-shadow: inset 0 0 0 2px var(--false);
   }
   td.prac-cell.incorrect .mark::after { content: "\2717"; color: var(--false); }
   td.prac-cell.revealed {
-    background: rgba(89,101,240,0.12);
-    box-shadow: inset 0 0 0 2px var(--accent);
+    background: rgba(37, 118, 235, 0.10);
+    box-shadow: inset 0 0 0 2px var(--signal-blue);
   }
-  td.prac-cell.revealed .mark::after { content: "\2605"; color: var(--accent); }
+  td.prac-cell.revealed .mark::after { content: "\2605"; color: var(--signal-blue); }

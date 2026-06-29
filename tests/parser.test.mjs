@@ -83,12 +83,19 @@ test("empty expression compiles to null", () => {
   assert.equal(compile(null, PQ), null);
 });
 
-test("errors: unknown variable, trailing tokens, bad parens", () => {
-  assert.throws(() => compile("p ∧ x", PQ), /Unknown variable/);
-  assert.throws(() => compile("p q", PQ), /Trailing tokens/);
-  assert.throws(() => compile("p ∧", PQ), /Unexpected end/);
-  assert.throws(() => compile("(p ∨ q", PQ), /Expected/);
-  assert.throws(() => compile("p ∧ )", PQ), /Unexpected token/);
+test("errors are specific and student-friendly", () => {
+  assert.throws(() => compile("p ∧ x", PQ), /isn't one of this table's variables/);
+  // trailing term / missing operator
+  assert.throws(() => compile("p q", PQ), /did you miss an operator/);
+  assert.throws(() => compile("p ¬ q", PQ), /“¬”.*did you miss an operator/);
+  // unfinished expression
+  assert.throws(() => compile("p ∧", PQ), /looks unfinished/);
+  // a variable/value was expected
+  assert.throws(() => compile("∧ p", PQ), /a variable or value was expected/);
+  // parentheses
+  assert.throws(() => compile("(p ∨ q", PQ), /closing parenthesis/);
+  assert.throws(() => compile("p ∧ )", PQ), /check your parentheses/);
+  // unknown character
   assert.throws(() => compile("@p", PQ), /Unexpected character/);
 });
 

@@ -50,9 +50,9 @@ export function tokenize(input, varSet) {
       if (varSet.has(name)) { tokens.push({ t: T.VAR, name: name }); continue; }
       if (name === "T") { tokens.push({ t: T.CONST, v: true }); continue; }
       if (name === "F") { tokens.push({ t: T.CONST, v: false }); continue; }
-      throw new Error("Unknown variable “" + name + "”");
+      throw new Error("“" + name + "” isn't one of this table's variables.");
     }
-    throw new Error("Unexpected character: " + ch);
+    throw new Error("Unexpected character “" + ch + "”.");
   }
   return tokens;
 }
@@ -63,7 +63,10 @@ export function parse(tokens) {
   const next = () => tokens[pos++];
   const expect = (t) => {
     const tok = next();
-    if (!tok || tok.t !== t) throw new Error("Expected " + t);
+    if (!tok || tok.t !== t) {
+      if (t === T.RP) throw new Error("Missing a closing parenthesis “)”.");
+      throw new Error("Unexpected " + describeToken(tok) + " here.");
+    }
     return tok;
   };
 
@@ -97,16 +100,30 @@ export function parse(tokens) {
   }
   function parsePrimary() {
     const tok = peek();
-    if (!tok) throw new Error("Unexpected end of expression");
+    if (!tok) throw new Error("The expression looks unfinished — add a variable or value at the end.");
     if (tok.t === T.VAR) { next(); return { op: "VAR", name: tok.name }; }
     if (tok.t === T.CONST) { next(); return { op: "CONST", v: tok.v }; }
     if (tok.t === T.LP) { next(); const e = parseIff(); expect(T.RP); return e; }
-    throw new Error("Unexpected token");
+    if (tok.t === T.RP) throw new Error("Unexpected “)” — check your parentheses.");
+    // an operator turned up where a variable/value was expected
+    throw new Error("Unexpected " + describeToken(tok) + " — a variable or value was expected here.");
   }
 
   const ast = parseIff();
-  if (pos !== tokens.length) throw new Error("Trailing tokens");
+  if (pos !== tokens.length) {
+    throw new Error("Unexpected " + describeToken(tokens[pos]) + " — did you miss an operator (∧ ∨ → ↔ ⊕) before it?");
+  }
   return ast;
+}
+
+// Human-readable label for a token, used in parser error messages.
+const TOKEN_SYMBOL = { NOT: "¬", AND: "∧", OR: "∨", XOR: "⊕", IMP: "→", IFF: "↔", LP: "(", RP: ")" };
+function describeToken(tok) {
+  if (!tok) return "the end of the expression";
+  if (tok.t === T.VAR) return "“" + tok.name + "”";
+  if (tok.t === T.CONST) return "“" + (tok.v ? "T" : "F") + "”";
+  const s = TOKEN_SYMBOL[tok.t];
+  return s ? "“" + s + "”" : "that";
 }
 
 export function compile(expr, varList) {

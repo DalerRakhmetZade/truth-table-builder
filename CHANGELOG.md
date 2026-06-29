@@ -6,6 +6,18 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.3.0] — 2026-06-29
+- Fresh look: a calmer, Apple-inspired light design across the whole app.
+- Type “/” inside a formula to pick a symbol — filter by typing, navigate with ↑/↓, Enter to insert.
+- Friendlier formula error messages that point at the problem, shown only after you finish typing.
+- Operator buttons now have tooltips (NOT, AND, OR, XOR, IMPLIES, IFF).
+- Removing a table or a column now asks for confirmation, using an in-app dialog (no browser pop-ups).
+- Reorder tables with up/down arrows when you have more than one.
+- You can now delete the last remaining table.
+- Removed the per-table Clear button — remove individual columns with their ✕ instead.
+- The “What's new” list is now collapsible by version.
+- Wider layout so larger tables have more room.
+
 ## [1.2.0] — 2026-06-29
 - Internal: refactored the app into ES modules (js/) and split the CSS into focused files (css/).
 - Dev: the app now loads as native modules, so it must be served — added `npm start` (a zero-dependency local server). It no longer opens directly via file://.
@@ -30,6 +42,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.3.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.3.0
 [1.2.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.2.0
 [1.1.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.1.0
 [1.0.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.0.0

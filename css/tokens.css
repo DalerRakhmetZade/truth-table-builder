@@ -1,0 +1,69 @@
+/* Design tokens — "Things" (Cultured Code) system. See DESIGN.md.
+   The app's existing semantic variables are remapped onto these tokens so the
+   whole palette flips to the Things look. */
+:root {
+  /* --- Things palette --- */
+  --ink: #303336;          /* primary text */
+  --paper: #ffffff;        /* card surfaces */
+  --mist: #f2f5f7;         /* page canvas */
+  --fog: #838b96;          /* secondary / body */
+  --ash: #55606e;          /* tertiary text, icon strokes */
+  --smoke: #44474b;        /* emphasized inline text */
+  --silver: #9299a4;       /* disabled / de-emphasized */
+  --hairline: #dfe3e8;     /* borders, subtle dividers */
+  --signal-blue: #2576eb;  /* links, icons, primary action */
+  --signal-blue-deep: #1a5fb8; /* link/button hover */
+  --sky-blue: #5c9cf5;     /* secondary blue */
+
+  /* Muted functional colors (cool-tinted) for True/False + grading */
+  --true: #2f8f6b;
+  --false: #c2566a;
+  --true-bg: rgba(47, 143, 107, 0.12);
+  --false-bg: rgba(194, 86, 106, 0.12);
+
+  /* --- Typography --- */
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+             ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --text-caption: 13px;
+  --text-body: 15px;
+  --text-subheading: 18px;
+  --text-heading-sm: 20px;
+  --text-heading: 24px;
+  --text-display: 36px;
+
+  /* --- Spacing (4px base) --- */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-28: 28px;
+  --space-36: 36px;
+  --space-40: 40px;
+
+  /* --- Radii --- */
+  --radius-card: 18px;
+  --radius-control: 6px;
+  --radius-icon: 3px;
+  --radius-pill: 9999px;
+
+  /* --- Elevation (cards & dialogs only) --- */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.1);
+
+  /* --- Layout --- */
+  --page-max-width: 1440px;
+
+  /* ---------------------------------------------------------------------
+     Back-compat: map the app's existing semantic variables onto the tokens
+     so component CSS picks up the new palette with minimal churn. */
+  --bg: var(--mist);
+  --panel: var(--paper);
+  --panel-2: #eef1f4;
+  --line: var(--hairline);
+  --text: var(--ink);
+  --muted: var(--fog);
+  --accent: var(--signal-blue);
+  --accent-2: var(--sky-blue);
+  --err: var(--false);
+}

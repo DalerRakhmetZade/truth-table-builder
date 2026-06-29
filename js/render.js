@@ -5,11 +5,17 @@ import { compile, evalAst } from "./parser.js";
 import { generateRows, escapeHtml, escapeAttr, ROW_WARN_THRESHOLD } from "./logic.js";
 
 export function render() {
-  tablesEl.innerHTML = app.state.tables.map(renderTable).join("");
+  if (!app.state.tables.length) {
+    tablesEl.innerHTML =
+      '<div class="empty no-tables">No tables yet. Click <strong>+ Add table</strong> above to start.</div>';
+  } else {
+    const n = app.state.tables.length;
+    tablesEl.innerHTML = app.state.tables.map((t, i) => renderTable(t, i, n)).join("");
+  }
   saveState();
 }
 
-export function renderTable(table) {
+export function renderTable(table, index = 0, total = 1) {
   const varList = table.varNames;
   const rows = generateRows(varList);
   const tid = table.id;
@@ -30,8 +36,22 @@ export function renderTable(table) {
 
   let h = '<div class="card" data-table="' + tid + '">';
 
+  // reorder arrows (only when there's more than one table)
+  let reorder = "";
+  if (total > 1) {
+    const upDis = index === 0 ? " disabled" : "";
+    const downDis = index === total - 1 ? " disabled" : "";
+    reorder = '<div class="reorder">' +
+      '<button class="icon-btn" data-action="moveup" data-table="' + tid + '" ' +
+        'title="Move table up" aria-label="Move table up"' + upDis + '>▲</button>' +
+      '<button class="icon-btn" data-action="movedown" data-table="' + tid + '" ' +
+        'title="Move table down" aria-label="Move table down"' + downDis + '>▼</button>' +
+    '</div>';
+  }
+
   // top bar: title + controls
   h += '<div class="card-bar">' +
+        reorder +
         '<input type="text" class="title-input" data-table="' + tid + '" ' +
           'value="' + escapeAttr(table.title || "") + '" placeholder="Untitled table" />' +
         '<div class="group"><label>Variables</label>' +
@@ -39,7 +59,6 @@ export function renderTable(table) {
           'min="1" max="14" value="' + table.varCount + '" /></div>' +
         '<div class="group">' +
           '<button class="primary" data-action="addcol" data-table="' + tid + '">+ Column</button>' +
-          '<button class="ghost" data-action="clear" data-table="' + tid + '">Clear</button>' +
           '<button class="ghost" data-action="copy" data-table="' + tid + '">Copy</button>' +
           '<button class="ghost remove-table" data-action="removetable" data-table="' + tid + '">Remove</button>' +
         '</div>' +

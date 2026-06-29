@@ -1,115 +1,128 @@
-/* Foundations: variables, reset, header, controls, inputs, buttons, footer */
-  :root {
-    --bg: #f5f6fb;
-    --panel: #ffffff;
-    --panel-2: #eef0f8;
-    --line: #d7dbec;
-    --text: #1c2033;
-    --muted: #6c728f;
-    --accent: #5965f0;
-    --accent-2: #0a9d80;
-    --true: #0f9d63;
-    --false: #d83a55;
-    --true-bg: rgba(15,157,99,0.12);
-    --false-bg: rgba(216,58,85,0.12);
-    --err: #d83a55;
-  }
+/* Foundations: reset, header, controls, inputs, buttons, footer.
+   Color tokens live in tokens.css. */
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.4;
+    background: var(--mist);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
-  header.app {
-    padding: 18px 22px 10px;
-    border-bottom: 1px solid var(--line);
-  }
-  header.app h1 { margin: 0; font-size: 20px; letter-spacing: 0.3px; }
-  header.app p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 
+  /* Header floats on the canvas — no border, no fill */
+  header.app {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 36px 24px 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  header.app h1 {
+    margin: 0;
+    font-size: var(--text-heading);
+    font-weight: 700;
+    color: var(--ink);
+  }
+  header.app p {
+    margin: 2px 0 0;
+    color: var(--fog);
+    font-size: var(--text-body);
+    line-height: 1.5;
+    max-width: 640px;
+  }
+
+  /* Controls bar floats on the canvas — no fill, no border */
   .controls {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
     gap: 10px 14px;
     align-items: center;
-    padding: 14px 22px;
-    border-bottom: 1px solid var(--line);
-    background: var(--panel);
+    padding: 8px 24px 4px;
   }
-  .controls .group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .controls label { color: var(--muted); font-size: 13px; }
-  .controls .sep { width: 1px; height: 26px; background: var(--line); }
+  .controls .group { display: flex; align-items: center; gap: 8px; }
+  .controls label { color: var(--fog); font-size: var(--text-caption); }
+  .controls .sep { width: 1px; height: 22px; background: var(--hairline); }
 
   input[type="number"], input[type="text"] {
-    background: var(--panel-2);
-    color: var(--text);
-    border: 1px solid var(--line);
-    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-control);
     padding: 7px 9px;
     font-size: 14px;
+    font-family: inherit;
     outline: none;
+    transition: border-color 0.12s, box-shadow 0.12s;
   }
   input[type="number"] { width: 64px; }
-  input[type="number"]:focus, input[type="text"]:focus { border-color: var(--accent); }
-
-  button {
-    background: var(--panel-2);
-    color: var(--text);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 7px 12px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.12s, border-color 0.12s, transform 0.05s;
+  input[type="number"]:focus, input[type="text"]:focus {
+    border-color: var(--signal-blue);
+    box-shadow: 0 0 0 3px rgba(37, 118, 235, 0.12);
   }
-  button:hover { border-color: var(--accent); }
+
+  /* Quiet by default; Signal Blue reserved for the one primary action per area */
+  button {
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-control);
+    padding: 7px 12px;
+    font-size: var(--text-caption);
+    font-family: inherit;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s, transform 0.05s;
+  }
+  button:hover { border-color: var(--silver); }
   button:active { transform: translateY(1px); }
-  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
-  button.primary:hover { filter: brightness(1.08); }
-  button.ghost { background: transparent; }
+  button.primary {
+    background: var(--signal-blue);
+    border-color: var(--signal-blue);
+    color: #fff;
+    font-weight: 600;
+  }
+  button.primary:hover { background: var(--signal-blue-deep); border-color: var(--signal-blue-deep); }
+  button.ghost { background: transparent; border-color: transparent; color: var(--ash); }
+  button.ghost:hover { background: var(--paper); border-color: var(--hairline); color: var(--ink); }
 
   .symbols { display: flex; flex-wrap: wrap; gap: 6px; }
-  .symbols button {
-    min-width: 34px;
-    font-size: 15px;
-    padding: 6px 8px;
-  }
-  .symbols .key { color: var(--muted); font-size: 11px; margin-left: 3px; }
+  .symbols button { min-width: 34px; font-size: 15px; padding: 6px 8px; color: var(--ash); }
+  .symbols button:hover { color: var(--ink); }
+  .symbols .key { color: var(--silver); font-size: 11px; margin-left: 3px; }
 
   .warn {
-    margin: 0;
-    padding: 10px 22px;
-    background: rgba(216,58,85,0.10);
-    color: #b02a42;
-    font-size: 13px;
-    border-bottom: 1px solid var(--line);
+    max-width: var(--page-max-width);
+    margin: 8px auto 0;
+    padding: 10px 14px;
+    background: var(--false-bg);
+    color: var(--false);
+    font-size: var(--text-caption);
+    border-radius: var(--radius-control);
     display: none;
   }
   .warn.show { display: block; }
 
-  .hint { color: var(--muted); font-size: 12px; }
-  a { color: var(--accent); }
+  .hint { color: var(--fog); font-size: 12px; }
+  a { color: var(--signal-blue); text-decoration: none; }
+  a:hover { color: var(--signal-blue-deep); }
 
-  /* ----- footer + version ----- */
+  /* ----- footer + version (quiet text link) ----- */
   .app-footer {
-    padding: 18px 22px 40px;
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 28px 24px 48px;
     text-align: center;
   }
   .version-btn {
     background: transparent;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    border-radius: 999px;
-    padding: 6px 14px;
-    font-size: 12px;
+    border: none;
+    color: var(--fog);
+    padding: 6px 8px;
+    font-size: var(--text-caption);
     cursor: pointer;
   }
-  .version-btn:hover { border-color: var(--accent); color: var(--text); }
-  .version-btn #versionLabel { color: var(--accent); font-weight: 700; }
+  .version-btn:hover { color: var(--ink); }
+  .version-btn #versionLabel { color: var(--signal-blue); font-weight: 700; }

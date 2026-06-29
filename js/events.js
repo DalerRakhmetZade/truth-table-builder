@@ -4,6 +4,7 @@ import { app, getTable, getCol, makeTable, makeColumn, saveState, resetState } f
 import { compile, evalAst } from "./parser.js";
 import { generateRows, gradeColumn, syncVarNames, renameInExpr, escapeHtml, tableToText } from "./logic.js";
 import { render } from "./render.js";
+import { confirmDialog, notify } from "./ui.js";
 
 export function initEvents() {
   // cell toggle (manual columns)
@@ -52,12 +53,17 @@ export function initEvents() {
     if (input) render();
   });
 
-  // remove column
-  tablesEl.addEventListener("click", (e) => {
+  // remove column (with confirmation)
+  tablesEl.addEventListener("click", async (e) => {
     const btn = e.target.closest("button.remove");
     if (!btn) return;
     const table = getTable(btn.dataset.table); if (!table) return;
-    table.columns = table.columns.filter((c) => c.id !== Number(btn.dataset.remove));
+    const col = getCol(table, btn.dataset.remove); if (!col) return;
+    const label = col.expr && col.expr.trim() ? "“" + col.expr.trim() + "”" : "this column";
+    const ok = await confirmDialog("Remove the " + label + " column?",
+      { confirmText: "Remove", danger: true });
+    if (!ok) return;
+    table.columns = table.columns.filter((c) => c.id !== col.id);
     render();
   });
 
@@ -79,8 +85,8 @@ export function initEvents() {
     render();
   });
 
-  // per-table action buttons (add / clear / copy / remove / mode / check / reveal)
-  tablesEl.addEventListener("click", (e) => {
+  // per-table action buttons (add / copy / remove / reorder / mode / check / reveal)
+  tablesEl.addEventListener("click", async (e) => {
     const btn = e.target.closest("button[data-action]");
     if (!btn) return;
     const table = getTable(btn.dataset.table); if (!table) return;
@@ -90,17 +96,20 @@ export function initEvents() {
       render();
       const inputs = tablesEl.querySelectorAll('input.expr-input[data-table="' + table.id + '"]');
       if (inputs.length) inputs[inputs.length - 1].focus();
-    } else if (act === "clear") {
-      table.columns.forEach((c) => {
-        c.cells = {}; c.overridden = false; c.results = {}; c.summary = ""; c.summaryKind = "";
-      });
-      render();
     } else if (act === "copy") {
       copyTableText(table, btn);
     } else if (act === "removetable") {
-      if (!confirm("Remove “" + (table.title || "this table") + "”?")) return;
+      const ok = await confirmDialog("Remove “" + (table.title || "this table") + "”?",
+        { confirmText: "Remove", danger: true });
+      if (!ok) return;
       app.state.tables = app.state.tables.filter((t) => t.id !== table.id);
-      if (app.state.tables.length === 0) app.state.tables.push(makeTable("Table 1"));
+      render();
+    } else if (act === "moveup" || act === "movedown") {
+      const arr = app.state.tables;
+      const i = arr.indexOf(table);
+      const j = act === "moveup" ? i - 1 : i + 1;
+      if (i < 0 || j < 0 || j >= arr.length) return;
+      [arr[i], arr[j]] = [arr[j], arr[i]];
       render();
     } else if (act === "setmode") {
       const col = getCol(table, btn.dataset.col); if (!col) return;
@@ -134,8 +143,10 @@ export function initEvents() {
     if (titles.length) { titles[0].focus(); titles[0].select(); }
   });
 
-  document.getElementById("resetAll").addEventListener("click", () => {
-    if (!confirm("Reset everything (all tables and columns)?")) return;
+  document.getElementById("resetAll").addEventListener("click", async () => {
+    const ok = await confirmDialog("Reset everything (all tables and columns)?",
+      { confirmText: "Reset", danger: true });
+    if (!ok) return;
     resetState();
     render();
   });
@@ -150,7 +161,7 @@ export function initEvents() {
     if (!btn) return;
     const sym = btn.dataset.sym;
     const input = app.lastFocusedInput && document.body.contains(app.lastFocusedInput) ? app.lastFocusedInput : null;
-    if (!input) { alert("Click into an expression field first, then insert a symbol."); return; }
+    if (!input) { notify("Click into an expression field first, then insert a symbol."); return; }
     const start = input.selectionStart, end = input.selectionEnd;
     input.value = input.value.slice(0, start) + sym + input.value.slice(end);
     const pos = start + sym.length;
@@ -244,15 +255,16 @@ function handleReveal(table, col) {
 function liveUpdateColumn(table, col, input) {
   const varList = table.varNames;
   const rows = generateRows(varList);
-  let error = null, compiled = null;
+  let compiled = null;
   if (col.expr && col.expr.trim()) {
     try { const c = compile(col.expr, varList); if (c) compiled = c; }
-    catch (err) { error = err.message; }
+    catch (err) { /* don't surface parse errors while still typing */ }
   }
-  input.classList.toggle("invalid", !!error);
+  // While editing, never show the error styling/text — it's distracting to flash
+  // errors on a half-typed expression. The error appears on blur (full render).
+  input.classList.remove("invalid");
   const meta = input.closest(".col-head").querySelector(".meta");
-  if (error) { meta.textContent = error; meta.className = "meta error"; }
-  else { meta.textContent = ""; meta.className = "meta"; }
+  if (meta) { meta.textContent = ""; meta.className = "meta"; }
 
   // Never reveal answers while a column is in practice mode.
   if (col.practice) return;

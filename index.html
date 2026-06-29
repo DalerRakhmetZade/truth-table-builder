@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Truth Table Builder</title>
+<link rel="stylesheet" href="css/tokens.css" />
 <link rel="stylesheet" href="css/base.css" />
 <link rel="stylesheet" href="css/layout.css" />
 <link rel="stylesheet" href="css/table.css" />
@@ -12,8 +13,10 @@
 </head>
 <body>
 <header class="app">
-  <h1>Truth Table Builder</h1>
-  <p>Set the variables, add expression columns, click cells to toggle, or type a proposition to auto-fill it.</p>
+  <div class="brand-text">
+    <h1>Truth Table Builder</h1>
+    <p>Set the variables, add expression columns, click cells to toggle, or type a proposition to auto-fill it.</p>
+  </div>
 </header>
 
 <div class="controls">
@@ -26,14 +29,14 @@
     <span class="hint">Insert symbol</span>
   </div>
   <div class="group symbols" id="symbols">
-    <button data-sym="¬" title="NOT (~ !)">¬<span class="key">~</span></button>
-    <button data-sym="∧" title="AND (& *)">∧<span class="key">&</span></button>
-    <button data-sym="∨" title="OR (|)">∨<span class="key">|</span></button>
-    <button data-sym="⊕" title="XOR (^)">⊕<span class="key">^</span></button>
-    <button data-sym="→" title="IMPLIES (->)">→<span class="key">-&gt;</span></button>
-    <button data-sym="↔" title="IFF (<->)">↔<span class="key">&lt;-&gt;</span></button>
-    <button data-sym="(" title="open paren">(</button>
-    <button data-sym=")" title="close paren">)</button>
+    <button data-sym="¬" title="NOT (negation)">¬<span class="key">~</span></button>
+    <button data-sym="∧" title="AND (conjunction)">∧<span class="key">&</span></button>
+    <button data-sym="∨" title="OR (disjunction)">∨<span class="key">|</span></button>
+    <button data-sym="⊕" title="XOR (exclusive or)">⊕<span class="key">^</span></button>
+    <button data-sym="→" title="IMPLIES (if … then)">→<span class="key">-&gt;</span></button>
+    <button data-sym="↔" title="IF AND ONLY IF (biconditional)">↔<span class="key">&lt;-&gt;</span></button>
+    <button data-sym="(" title="Open parenthesis">(</button>
+    <button data-sym=")" title="Close parenthesis">)</button>
   </div>
 </div>
 
