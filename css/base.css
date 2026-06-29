@@ -30,7 +30,6 @@
     color: var(--fog);
     font-size: var(--text-body);
     line-height: 1.5;
-    max-width: 640px;
   }
 
   /* Controls bar floats on the canvas — no fill, no border */
