@@ -126,3 +126,5 @@
   }
   .version-btn:hover { color: var(--ink); }
   .version-btn #versionLabel { color: var(--signal-blue); font-weight: 700; }
+
+  .nowrap { white-space: nowrap; }
