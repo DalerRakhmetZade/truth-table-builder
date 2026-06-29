@@ -1,9 +1,12 @@
 {
   "name": "truth-table-builder",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
-  "description": "A lightweight single-file truth table builder with auto-evaluation.",
+  "type": "module",
+  "description": "A lightweight truth table builder with practice mode and auto-evaluation.",
   "scripts": {
-    "test": "node --test 'tests/**/*.test.mjs'"
+    "start": "node scripts/serve.mjs",
+    "test": "node --test 'tests/**/*.test.mjs'",
+    "sync-version": "node scripts/sync-version.mjs"
   }
 }

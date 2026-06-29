@@ -1,0 +1,56 @@
+/* Layout: table cards container, card bar, warnings, empty state */
+  /* ----- multiple table cards ----- */
+  #tables {
+    padding: 18px 22px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--panel-2);
+  }
+  .card-bar .title-input {
+    font-size: 16px;
+    font-weight: 700;
+    min-width: 200px;
+    flex: 1 1 200px;
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .card-bar .title-input:hover { border-color: var(--line); }
+  .card-bar .title-input:focus { border-color: var(--accent); background: var(--panel); }
+  .card-bar .group { display: flex; align-items: center; gap: 8px; }
+  .card-bar label { color: var(--muted); font-size: 13px; }
+  .card-bar .remove-table { color: var(--false); border-color: var(--line); }
+  .card-bar .remove-table:hover { border-color: var(--false); }
+  .card-body { padding: 14px; overflow: auto; }
+  .card-warn {
+    margin: 0 14px 12px;
+    padding: 8px 12px;
+    background: rgba(216,58,85,0.10);
+    color: #b02a42;
+    font-size: 12px;
+    border-radius: 8px;
+    display: none;
+  }
+  .card-warn.show { display: block; }
+  .card .empty { padding: 24px 0; }
+
+  .empty {
+    color: var(--muted);
+    padding: 40px 0;
+    text-align: center;
+    font-size: 14px;
+  }

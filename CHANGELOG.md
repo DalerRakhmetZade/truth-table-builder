@@ -1,41 +1,35 @@
 # Changelog
 
-All notable changes to this project are documented here. This file mirrors the
-in-app version history (see the **About** dialog). The format is based on
+All notable changes to this project are documented here. This file is generated
+from `js/version.js` (run `npm run sync-version`) and mirrors the in-app version
+history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] — 2026-06-29
+- Internal: refactored the app into ES modules (js/) and split the CSS into focused files (css/).
+- Dev: the app now loads as native modules, so it must be served — added `npm start` (a zero-dependency local server). It no longer opens directly via file://.
+- Dev: js/version.js is now the single source of truth for the version and changelog; `npm run sync-version` regenerates CHANGELOG.md and package.json.
+- No user-facing changes — the app behaves exactly as before.
+
 ## [1.1.0] — 2026-06-29
-### Added
-- **Practice mode** — fill in a column's T/F values yourself instead of having
-  them auto-filled, then **Check** your answers. New columns start in Practice
-  so the answer is never revealed automatically.
-- **Auto / Practice** segmented switch per expression column.
-- **Check** grades your guesses (✓ / ✗ with a colored ring) and shows a summary
-  like "6/8 correct · 1 to fix · 1 blank".
-- **Reveal answers** button fills in the correct values on demand.
+- New: Practice mode — fill in a column's T/F values yourself, then Check your answers.
+- Auto / Practice switch per column; new columns start in Practice so answers aren't revealed.
+- Check grades your guesses (✓ / ✗ with a ring) and shows a summary like “6/8 correct”.
+- Reveal answers button fills in the correct values when you want to see them.
+- Cells accept only T or F (lowercase is auto-capitalized on Check), with a hint if you type anything else.
 - Credited CSCI S-20 in the About dialog.
 
-### Changed
-- Practice cells accept only `T`/`F` (lowercase is auto-capitalized on Check),
-  with a coaching hint for anything else. Correctness is shown by a ring + badge
-  rather than the T/F text color, so a correct `F` no longer looks like an error.
-
 ## [1.0.0] — 2026-06-29
-First public release.
-
-### Added
-- Generate truth tables from a chosen number of variables, in standard textbook
-  order (top row all-true, first variable most significant).
+- First public release.
+- Generate truth tables from a chosen number of variables (standard textbook order).
 - Multiple tables, each with its own editable title.
-- Inline variable renaming; renames propagate into that table's expressions.
-- Expression columns that auto-evaluate, plus manual cell toggling (T / F / blank)
-  and a double-click override for computed columns.
-- Operators `¬ ∧ ∨ → ↔ ⊕` with ASCII aliases (`~ ! & * . | + ^ -> <-> =`) and
-  constants `T/F/1/0`, with a symbol-insert toolbar.
-- Copy any table as a plain-text grid.
-- Automatic persistence to the browser (`localStorage`).
+- Rename variables inline; renames propagate into that table's expressions.
+- Add expression columns that auto-evaluate, or toggle cells manually (T / F / blank).
+- Operators ¬ ∧ ∨ → ↔ ⊕ with ASCII aliases (~ ! & * . | + ^ -> <-> =) and constants T/F/1/0.
+- Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.2.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.2.0
 [1.1.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.1.0
 [1.0.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.0.0

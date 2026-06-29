@@ -1,0 +1,64 @@
+/* About dialog + changelog */
+  /* ----- about dialog ----- */
+  .about-dialog {
+    width: min(560px, 92vw);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 26px 26px 22px;
+    background: var(--panel);
+    color: var(--text);
+    box-shadow: 0 24px 60px rgba(20, 24, 60, 0.28);
+    position: relative;
+  }
+  .about-dialog::backdrop {
+    background: rgba(15, 18, 33, 0.45);
+    backdrop-filter: blur(2px);
+  }
+  .about-dialog h2 { margin: 0 0 6px; font-size: 20px; }
+  .about-dialog h3 { margin: 18px 0 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px; }
+  .about-version { color: var(--accent); font-size: 15px; font-weight: 700; }
+  .about-desc { margin: 0 0 10px; color: var(--text); font-size: 14px; }
+  .about-how { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+  .about-how code, .about-desc code {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 5px;
+    font-size: 12px;
+  }
+  .about-links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 6px; }
+  .about-links a { font-size: 13px; font-weight: 600; }
+  .dialog-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+  }
+  .dialog-close:hover { border-color: var(--accent); color: var(--text); }
+
+  .changelog { max-height: 46vh; overflow: auto; }
+  .changelog .release { padding: 10px 0; border-top: 1px solid var(--line); }
+  .changelog .release:first-child { border-top: none; padding-top: 2px; }
+  .changelog .release-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .changelog .release-ver { font-weight: 700; color: var(--accent); font-size: 14px; }
+  .changelog .release-date { color: var(--muted); font-size: 12px; }
+  .changelog ul { margin: 0; padding-left: 18px; }
+  .changelog li { font-size: 13px; margin: 3px 0; }
+  .about-credit { margin: 16px 0 0; color: var(--muted); font-size: 12px; text-align: center; }

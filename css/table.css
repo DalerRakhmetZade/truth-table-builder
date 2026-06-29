@@ -1,0 +1,79 @@
+/* Truth table: table, cells, variable + expression headers */
+  .table-wrap {
+    padding: 18px 22px 60px;
+    overflow: auto;
+  }
+  table {
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    min-width: 100%;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    text-align: center;
+    padding: 0;
+  }
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--panel-2);
+    z-index: 2;
+    padding: 8px 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  thead th.var-col { color: var(--accent-2); font-size: 16px; }
+  .var-input {
+    width: 52px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent-2);
+    background: var(--panel);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 5px 4px;
+  }
+  .var-input:hover { border-color: var(--line); }
+  .var-input:focus { border-color: var(--accent); color: var(--text); }
+  td {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  td .cell {
+    display: block;
+    width: 100%;
+    min-width: 46px;
+    padding: 9px 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  td.t .cell { color: var(--true); background: var(--true-bg); }
+  td.f .cell { color: var(--false); background: var(--false-bg); }
+  td.var-cell { background: rgba(0,211,167,0.06); }
+  td.var-cell.t .cell { color: var(--true); }
+  td.var-cell.f .cell { color: var(--false); }
+  tbody tr:hover td { background: rgba(108,123,255,0.05); }
+
+  .col-head {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+  }
+  .col-head .expr-input {
+    width: 150px;
+    text-align: center;
+    font-size: 14px;
+  }
+  .col-head .expr-input.invalid { border-color: var(--err); color: #b02a42; }
+  .col-head .head-row { display: flex; gap: 6px; align-items: center; justify-content: center; }
+  .col-head .meta { font-size: 11px; color: var(--muted); min-height: 14px; }
+  .col-head .meta:empty { min-height: 0; display: none; }
+  .col-head .meta.error { color: var(--err); }
+  .col-head .meta.overridden { color: var(--accent-2); }
+  .col-head .remove {
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 1;
+  }
