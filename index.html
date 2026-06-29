@@ -37,6 +37,33 @@
 
 <div id="tables"></div>
 
+<footer class="app-footer">
+  <button id="aboutBtn" class="version-btn" title="About &amp; version history">
+    Truth Table Builder <span id="versionLabel">v0.0.0</span>
+  </button>
+</footer>
+
+<dialog id="aboutDialog" class="about-dialog">
+  <button class="dialog-close" id="aboutClose" aria-label="Close">✕</button>
+  <h2>Truth Table Builder <span id="aboutVersion" class="about-version"></span></h2>
+  <p class="about-desc">
+    A lightweight tool for building truth tables in discrete math — set your
+    variables, add expression columns, and let it auto-fill the T/F values.
+  </p>
+  <p class="about-how">
+    Operators: <code>¬ ∧ ∨ → ↔ ⊕</code> &nbsp;·&nbsp; or type ASCII
+    <code>~ &amp; | -&gt; &lt;-&gt; ^</code>. Click a cell to toggle T / F / blank.
+  </p>
+  <div class="about-links">
+    <a href="https://truthtable.r-z.app/" target="_blank" rel="noopener">Live app</a>
+    <a href="https://github.com/DalerRakhmetZade/truth-table-builder" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/DalerRakhmetZade/truth-table-builder/issues/new" target="_blank" rel="noopener">Report a bug / request a feature</a>
+  </div>
+  <h3>What's new</h3>
+  <div id="changelog" class="changelog"></div>
+  <p class="about-credit">Made for our discrete math class. ✦</p>
+</dialog>
+
 <script src="app.js"></script>
 </body>
 </html>

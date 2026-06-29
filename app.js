@@ -14,6 +14,28 @@
 
 const DEFAULT_VAR_NAMES = ["p","q","r","s","t","u","v","w","x","y","z","a","b","c"];
 const STORAGE_KEY = "truthTableBuilder.v1";
+
+/* ------------------------------ version / about -------------------------- */
+const APP_VERSION = "1.0.0";
+// Version history (newest first). Single source of truth for the About dialog;
+// mirrored in CHANGELOG.md. Each entry: { version, date (YYYY-MM-DD), changes[] }.
+const CHANGELOG = [
+  {
+    version: "1.0.0",
+    date: "2026-06-29",
+    changes: [
+      "First public release.",
+      "Generate truth tables from a chosen number of variables (standard textbook order).",
+      "Multiple tables, each with its own editable title.",
+      "Rename variables inline; renames propagate into that table's expressions.",
+      "Add expression columns that auto-evaluate, or toggle cells manually (T / F / blank).",
+      "Operators ¬ ∧ ∨ → ↔ ⊕ with ASCII aliases (~ ! & * . | + ^ -> <-> =) and constants T/F/1/0.",
+      "Copy any table as a plain-text grid; work auto-saves to your browser.",
+      "About dialog with version history.",
+    ],
+  },
+];
+
 const ROW_WARN_THRESHOLD = 1024; // 2^10
 
 function defaultName(i) {
@@ -637,5 +659,47 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+/* ------------------------------ about dialog ----------------------------- */
+function initAbout() {
+  const versionLabel = document.getElementById("versionLabel");
+  const aboutVersion = document.getElementById("aboutVersion");
+  if (versionLabel) versionLabel.textContent = "v" + APP_VERSION;
+  if (aboutVersion) aboutVersion.textContent = "v" + APP_VERSION;
+
+  const changelogEl = document.getElementById("changelog");
+  if (changelogEl) changelogEl.innerHTML = renderChangelog(CHANGELOG);
+
+  const dialog = document.getElementById("aboutDialog");
+  const openBtn = document.getElementById("aboutBtn");
+  const closeBtn = document.getElementById("aboutClose");
+  if (!dialog || !openBtn) return;
+
+  openBtn.addEventListener("click", () => {
+    if (typeof dialog.showModal === "function") dialog.showModal();
+    else dialog.setAttribute("open", "");
+  });
+  if (closeBtn) closeBtn.addEventListener("click", () => dialog.close());
+  // close when clicking the backdrop (outside the dialog content box)
+  dialog.addEventListener("click", (e) => {
+    const r = dialog.getBoundingClientRect();
+    const inside = e.clientX >= r.left && e.clientX <= r.right &&
+                   e.clientY >= r.top && e.clientY <= r.bottom;
+    if (!inside) dialog.close();
+  });
+}
+
+function renderChangelog(entries) {
+  return entries.map((rel) =>
+    '<div class="release">' +
+      '<div class="release-head">' +
+        '<span class="release-ver">v' + escapeHtml(rel.version) + '</span>' +
+        '<span class="release-date">' + escapeHtml(rel.date) + '</span>' +
+      '</div><ul>' +
+      rel.changes.map((c) => "<li>" + escapeHtml(c) + "</li>").join("") +
+      "</ul></div>"
+  ).join("");
+}
+
 /* ------------------------------ boot ------------------------------------- */
 render();
+initAbout();
