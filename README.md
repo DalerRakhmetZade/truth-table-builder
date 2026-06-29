@@ -1,5 +1,7 @@
 # Truth Table Builder
 
+**Live demo:** https://polite-ground-0b993b60f.7.azurestaticapps.net/
+
 A lightweight truth table tool for discrete math. No build step and no runtime
 dependencies — just open `index.html` in any browser (or serve the folder).
 
