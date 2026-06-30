@@ -2,10 +2,18 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.3.0";
+export const APP_VERSION = "1.4.0";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.4.0",
+    date: "2026-06-29",
+    changes: [
+      "Implication columns (p → q) now have a “Logical forms ▾” menu to add the Converse, Inverse, and Contrapositive as new columns.",
+      "Each added form starts in Practice mode, so you can fill it in and check it — handy for seeing that the contrapositive matches the original and the converse matches the inverse.",
+    ],
+  },
   {
     version: "1.3.0",
     date: "2026-06-29",

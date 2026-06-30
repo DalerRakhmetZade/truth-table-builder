@@ -48,6 +48,55 @@ export function renameInExpr(expr, oldName, newName) {
   return expr.replace(re, (m, pre) => pre + newName);
 }
 
+// --- AST -> string ---------------------------------------------------------
+// Precedence (high -> low): ¬(5) > ∧(4) > ∨/⊕(3) > →(2, right-assoc) > ↔(1).
+const OP_PREC = { NOT: 5, AND: 4, OR: 3, XOR: 3, IMP: 2, IFF: 1 };
+const OP_SYMBOL = { AND: "∧", OR: "∨", XOR: "⊕", IMP: "→", IFF: "↔" };
+
+// Print an AST back to a clean expression string, parenthesizing only where
+// needed. parsing the result yields an equivalent tree.
+export function unparse(node) {
+  return print(node).s;
+}
+function print(node) {
+  switch (node.op) {
+    case "CONST": return { s: node.v ? "T" : "F", prec: 6 };
+    case "VAR": return { s: node.name, prec: 6 };
+    case "NOT": {
+      const c = print(node.e);
+      const inner = c.prec < OP_PREC.NOT ? "(" + c.s + ")" : c.s;
+      return { s: "¬" + inner, prec: OP_PREC.NOT };
+    }
+    default: {
+      const p = OP_PREC[node.op];
+      const rightAssoc = node.op === "IMP";
+      const l = print(node.l);
+      const r = print(node.r);
+      // left child needs parens if lower precedence, or equal precedence on a
+      // right-associative operator; right child is the mirror image.
+      const lNeeds = l.prec < p || (l.prec === p && rightAssoc);
+      const rNeeds = r.prec < p || (r.prec === p && !rightAssoc);
+      const ls = lNeeds ? "(" + l.s + ")" : l.s;
+      const rs = rNeeds ? "(" + r.s + ")" : r.s;
+      return { s: ls + " " + OP_SYMBOL[node.op] + " " + rs, prec: p };
+    }
+  }
+}
+
+// Given an AST, return the converse/inverse/contrapositive of a top-level
+// implication as expression strings, or null if it isn't an implication.
+export function implicationForms(ast) {
+  if (!ast || ast.op !== "IMP") return null;
+  const A = ast.l, B = ast.r;
+  const not = (n) => ({ op: "NOT", e: n });
+  const imp = (l, r) => ({ op: "IMP", l, r });
+  return {
+    converse: unparse(imp(B, A)),
+    inverse: unparse(imp(not(A), not(B))),
+    contrapositive: unparse(imp(not(B), not(A))),
+  };
+}
+
 // Grade typed guesses in a practice column against the correct expression values.
 // Returns counts and a per-row result map ('correct' | 'incorrect' | 'blank').
 export function gradeColumn(compiledAst, rows, cells) {

@@ -2,7 +2,7 @@
 import { tablesEl } from "./dom.js";
 import { app, saveState } from "./store.js";
 import { compile, evalAst } from "./parser.js";
-import { generateRows, escapeHtml, escapeAttr, ROW_WARN_THRESHOLD } from "./logic.js";
+import { generateRows, escapeHtml, escapeAttr, ROW_WARN_THRESHOLD, implicationForms } from "./logic.js";
 
 export function render() {
   if (!app.state.tables.length) {
@@ -101,13 +101,33 @@ export function renderTable(table, index = 0, total = 1) {
           (col.summary || "&nbsp;") + "</div>"
       : "";
 
+    // Converse / Inverse / Contrapositive — only for top-level implications.
+    let formsMenu = "";
+    if (col.compiled && col.compiled.ast.op === "IMP") {
+      const f = implicationForms(col.compiled.ast);
+      if (f) {
+        const item = (label, expr) =>
+          '<button class="forms-item" data-action="addform" data-table="' + tid + '" ' +
+            'data-col="' + col.id + '" data-expr="' + escapeAttr(expr) + '">' +
+            '<span class="forms-name">' + label + '</span>' +
+            '<span class="forms-expr">' + escapeHtml(expr) + '</span></button>';
+        formsMenu = '<details class="forms-menu">' +
+          '<summary class="forms-summary">Logical forms ▾</summary>' +
+          '<div class="forms-panel">' +
+            item("Converse", f.converse) +
+            item("Inverse", f.inverse) +
+            item("Contrapositive", f.contrapositive) +
+          '</div></details>';
+      }
+    }
+
     h += '<th><div class="col-head"><div class="head-row">' +
           '<input type="text" class="' + cls + '" data-table="' + tid + '" data-col="' + col.id + '" ' +
             'value="' + escapeAttr(col.expr || "") + '" placeholder="expr or blank" />' +
           '<button class="remove" data-table="' + tid + '" data-remove="' + col.id + '" ' +
             'title="Remove column">✕</button>' +
           '</div><div class="' + metaCls + '">' + metaTxt + '</div>' +
-          controls + coach + '</div></th>';
+          controls + coach + formsMenu + '</div></th>';
   });
   h += "</tr></thead><tbody>";
 

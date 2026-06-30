@@ -123,7 +123,20 @@ export function initEvents() {
       handleCheck(table, getCol(table, btn.dataset.col));
     } else if (act === "reveal") {
       handleReveal(table, getCol(table, btn.dataset.col));
+    } else if (act === "addform") {
+      // add the chosen logical form (converse/inverse/contrapositive) as a new
+      // Practice-mode column
+      const col = makeColumn();
+      col.expr = btn.dataset.expr || "";
+      table.columns.push(col);
+      render();
     }
+  });
+
+  // close any open "Logical forms" menu when clicking outside it
+  document.addEventListener("click", (e) => {
+    if (e.target.closest(".forms-menu")) return;
+    tablesEl.querySelectorAll("details.forms-menu[open]").forEach((d) => { d.open = false; });
   });
 
   // rename variables & change variable count (commit on blur/Enter)

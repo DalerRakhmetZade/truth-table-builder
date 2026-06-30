@@ -6,6 +6,10 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.4.0] — 2026-06-29
+- Implication columns (p → q) now have a “Logical forms ▾” menu to add the Converse, Inverse, and Contrapositive as new columns.
+- Each added form starts in Practice mode, so you can fill it in and check it — handy for seeing that the contrapositive matches the original and the converse matches the inverse.
+
 ## [1.3.0] — 2026-06-29
 - Fresh look: a calmer, Apple-inspired light design across the whole app.
 - Type “/” inside a formula to pick a symbol — filter by typing, navigate with ↑/↓, Enter to insert.
@@ -42,6 +46,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.4.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.4.0
 [1.3.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.3.0
 [1.2.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.2.0
 [1.1.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.1.0
