@@ -19,6 +19,10 @@ function cardSearchText(card) {
       (card.examples || []).map((e) => e.from + " " + e.to).join(" ")).toLowerCase();
   }
   if (card.kind === "text") return ((card.title || "") + " " + (card.body || "")).toLowerCase();
+  if (card.kind === "infer") {
+    return ((card.name || "") + " " + (card.premises || []).join(" ") + " " +
+      (card.conclusion || "") + " " + (card.note || "")).toLowerCase();
+  }
   const rows = equivRows(card).map((r) => r.lhs + " " + r.rhs).join(" ");
   return ((card.name || "") + " " + rows + " " + (card.note || "")).toLowerCase();
 }
@@ -42,6 +46,18 @@ function cardHtml(card) {
     return '<div class="note-card">' +
       (card.title ? '<div class="note-name">' + escapeHtml(card.title) + "</div>" : "") +
       '<div class="note-note">' + escapeHtml(card.body || "") + "</div>" +
+    "</div>";
+  }
+  if (card.kind === "infer") {
+    const prem = (card.premises || []).map((p) =>
+      '<code class="formula">' + escapeHtml(p) + "</code>").join('<span class="infer-sep">,</span>');
+    return '<div class="note-card">' +
+      '<div class="note-name">' + escapeHtml(card.name || "") + "</div>" +
+      '<div class="note-equiv">' + prem +
+        '<span class="equiv-sign">⊢</span>' +
+        '<code class="formula">' + escapeHtml(card.conclusion || "") + "</code>" +
+      "</div>" +
+      (card.note ? '<div class="note-note">' + escapeHtml(card.note) + "</div>" : "") +
     "</div>";
   }
   return '<div class="note-card">' +

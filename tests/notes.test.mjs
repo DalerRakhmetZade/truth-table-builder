@@ -43,6 +43,10 @@ test("every card has the required fields for its kind", () => {
         }
       } else if (kind === "text") {
         assert.equal(typeof card.body, "string", sec.id + ": text needs body");
+      } else if (kind === "infer") {
+        assert.ok(Array.isArray(card.premises) && card.premises.length > 0, sec.id + ": infer needs premises");
+        for (const p of card.premises) assert.equal(typeof p, "string");
+        assert.equal(typeof card.conclusion, "string", sec.id + ": infer needs conclusion");
       } else {
         assert.fail("unknown card kind: " + kind);
       }

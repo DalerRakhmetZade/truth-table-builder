@@ -145,6 +145,7 @@
     white-space: nowrap;
   }
   .equiv-sign { color: var(--signal-blue); font-weight: 800; font-size: 15px; }
+  .infer-sep { color: var(--fog); font-weight: 600; margin: 0 -4px; }
 
   /* algorithm steps */
   .note-card.step { padding-left: 16px; }

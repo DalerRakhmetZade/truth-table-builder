@@ -23,6 +23,10 @@
 //         examples: [ { from: "P → Q", to: "¬P ∨ Q" }, ... ] }
 //   • prose:
 //       { kind: "text", title: "optional", body: "paragraph text" }
+//   • inference rule:
+//       { kind: "infer", name: "Modus ponens",
+//         premises: ["A", "A → B"], conclusion: "B", note: "..." }
+//       → renders   Name:  A , A → B  ⊢  B   (note is optional, shown muted)
 //
 // TEMPLATE — copy a block and fill it in:
 //   {
@@ -70,6 +74,19 @@ export const NOTES = [
       { kind: "equiv", name: "Implication", lhs: "P → Q", rhs: "¬P ∨ Q" },
       { kind: "equiv", name: "Biconditional", lhs: "P ↔ Q", rhs: "(P → Q) ∧ (Q → P)" },
       { kind: "equiv", name: "Exclusive or (XOR)", lhs: "P ⊕ Q", rhs: "(P ∧ ¬Q) ∨ (¬P ∧ Q)", note: "also (P ∨ Q) ∧ ¬(P ∧ Q)" },
+    ],
+  },
+  {
+    id: "inference-rules",
+    title: "Inference Rules",
+    blurb: "Valid moves for reasoning forward: from the premises, conclude the result (⊢).",
+    cards: [
+      { kind: "infer", name: "Modus ponens", premises: ["A", "A → B"], conclusion: "B",
+        note: "Forward reasoning: it's raining, and rain implies wet ground, so the ground is wet." },
+      { kind: "infer", name: "Modus tollens", premises: ["¬B", "A → B"], conclusion: "¬A",
+        note: "Modus ponens on the contrapositive: A → B ≡ ¬B → ¬A, then ¬B gives ¬A." },
+      { kind: "infer", name: "And-elimination", premises: ["A ∧ B"], conclusion: "A",
+        note: "If both are true you can conclude either one alone — likewise A ∧ B ⊢ B." },
     ],
   },
   {
