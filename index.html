@@ -10,14 +10,21 @@
 <link rel="stylesheet" href="css/table.css" />
 <link rel="stylesheet" href="css/dialog.css" />
 <link rel="stylesheet" href="css/practice.css" />
+<link rel="stylesheet" href="css/notes.css" />
 </head>
 <body>
 <header class="app">
   <div class="brand-text">
     <h1>Truth Table Builder</h1>
-    <p>Set the variables, add expression columns, click cells to toggle, or type a proposition to <span class="nowrap">auto-fill</span> it.</p>
   </div>
+  <nav class="app-nav" id="appNav">
+    <a href="#builder" class="nav-link" data-route="builder">Builder</a>
+    <a href="#notes" class="nav-link" data-route="notes">Study Notes</a>
+  </nav>
 </header>
+
+<div id="builder-view">
+<p class="view-sub">Set the variables, add expression columns, click cells to toggle, or type a proposition to <span class="nowrap">auto-fill</span> it.</p>
 
 <div class="controls">
   <div class="group">
@@ -43,6 +50,16 @@
 <p class="warn" id="warn"></p>
 
 <div id="tables"></div>
+</div>
+
+<div id="notes-view" hidden>
+  <div class="notes-head">
+    <h2>Study Notes</h2>
+    <input type="search" id="notes-search" class="notes-search" placeholder="Search rules &amp; formulas…" autocomplete="off" />
+  </div>
+  <div id="notes-content" class="notes-content"></div>
+  <p id="notes-empty" class="notes-empty" style="display:none;">No rules match your search.</p>
+</div>
 
 <footer class="app-footer">
   <button id="aboutBtn" class="version-btn" title="About &amp; version history">

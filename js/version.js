@@ -2,10 +2,19 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.6.0";
+export const APP_VERSION = "1.7.0";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.7.0",
+    date: "2026-06-29",
+    changes: [
+      "New “Study Notes” tab — a quick-reference cheat sheet you can return to (also at the #notes link).",
+      "Browse by group tiles, then drill into a topic; search finds any rule across all groups.",
+      "Covers Logical Forms, the Equivalence Laws (Commutative, Associative, Distributive, De Morgan, Double negation, Implication, Biconditional, XOR), and the 4-step DNF/CNF conversion algorithm.",
+    ],
+  },
   {
     version: "1.6.0",
     date: "2026-06-29",
