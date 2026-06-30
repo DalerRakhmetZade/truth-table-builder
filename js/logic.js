@@ -97,6 +97,51 @@ export function implicationForms(ast) {
   };
 }
 
+// --- classification: tautology / unsatisfiable / satisfiable ---------------
+// The truth column for an AST over the given variable names (array of booleans).
+export function columnTruth(ast, names) {
+  return generateRows(names).map((row) => !!evalAst(ast, row));
+}
+
+// Classify a truth column: all true -> tautology, all false -> unsatisfiable,
+// mixed -> satisfiable (contingent).
+export function classify(truth) {
+  if (!truth.length) return "satisfiable";
+  const allTrue = truth.every(Boolean);
+  const allFalse = truth.every((v) => !v);
+  if (allTrue) return "tautology";
+  if (allFalse) return "unsatisfiable";
+  return "satisfiable";
+}
+
+// Given items [{ id, truth }] (truth = boolean[] of equal length), group ones
+// with identical truth columns and label groups of size >= 2 with A, B, C…
+// Returns a Map(id -> label) containing only grouped items.
+export function equivalenceGroups(items) {
+  const byKey = new Map();
+  for (const it of items) {
+    const key = it.truth.map((v) => (v ? "1" : "0")).join("");
+    if (!byKey.has(key)) byKey.set(key, []);
+    byKey.get(key).push(it.id);
+  }
+  const labels = new Map();
+  let next = 0;
+  // assign labels in order of first appearance for stable A/B/C
+  const seen = new Set();
+  for (const it of items) {
+    const key = it.truth.map((v) => (v ? "1" : "0")).join("");
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const group = byKey.get(key);
+    if (group.length >= 2) {
+      const label = String.fromCharCode(65 + next); // A, B, C…
+      next += 1;
+      for (const id of group) labels.set(id, label);
+    }
+  }
+  return labels;
+}
+
 // Grade typed guesses in a practice column against the correct expression values.
 // Returns counts and a per-row result map ('correct' | 'incorrect' | 'blank').
 export function gradeColumn(compiledAst, rows, cells) {

@@ -6,6 +6,13 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.5.0] — 2026-06-29
+- Every formula column now shows what kind of proposition it is: ⊤ Tautology (always true), ⊥ Unsatisfiable (always false), or Satisfiable (true in some rows).
+- Logically equivalent columns are flagged with a shared “≡” chip — e.g. an implication and its contrapositive line up.
+- In Practice mode the category/equivalence are hidden until you Check or Reveal, so they don't spoil the answer.
+- Added an “About logic” explainer (tautology, satisfiability, equivalence, and the SAT problem) to the About dialog.
+- You can now type ⊤ and ⊥ as the constants true and false.
+
 ## [1.4.0] — 2026-06-29
 - Implication columns (p → q) now have a “Logical forms ▾” menu to add the Converse, Inverse, and Contrapositive as new columns.
 - Each added form starts in Practice mode, so you can fill it in and check it — handy for seeing that the contrapositive matches the original and the converse matches the inverse.
@@ -46,6 +53,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.5.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.5.0
 [1.4.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.4.0
 [1.3.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.3.0
 [1.2.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.2.0

@@ -164,3 +164,19 @@
   .slash-item.active { background: rgba(37, 118, 235, 0.10); }
   .slash-item.active .slash-name { color: var(--signal-blue); }
   .slash-item:hover { background: var(--mist); }
+
+  /* ----- "Understanding propositions" explainer ----- */
+  .about-logic p { margin: 0 0 8px; font-size: 13px; color: var(--smoke); line-height: 1.55; }
+  .about-logic ul { margin: 0 0 12px; padding-left: 18px; }
+  .about-logic li { font-size: 13px; color: var(--smoke); line-height: 1.55; margin: 4px 0; }
+  .about-logic code {
+    background: var(--mist);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-icon);
+    padding: 1px 5px;
+    font-size: 12px;
+  }
+  .about-logic .lg-taut { color: var(--true); }
+  .about-logic .lg-unsat { color: var(--false); }
+  .about-logic .lg-sat { color: var(--ash); }
+  .about-logic .eq-chip { font-size: 11px; }

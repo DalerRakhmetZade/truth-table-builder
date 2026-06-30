@@ -35,6 +35,8 @@ export function tokenize(input, varSet) {
       case "↔": case "=": tokens.push({ t: T.IFF }); i++; continue;
       case "(": tokens.push({ t: T.LP }); i++; continue;
       case ")": tokens.push({ t: T.RP }); i++; continue;
+      case "⊤": tokens.push({ t: T.CONST, v: true }); i++; continue;
+      case "⊥": tokens.push({ t: T.CONST, v: false }); i++; continue;
     }
 
     // constants

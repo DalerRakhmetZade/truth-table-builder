@@ -2,7 +2,8 @@
 import { tablesEl } from "./dom.js";
 import { app, saveState } from "./store.js";
 import { compile, evalAst } from "./parser.js";
-import { generateRows, escapeHtml, escapeAttr, ROW_WARN_THRESHOLD, implicationForms } from "./logic.js";
+import { generateRows, escapeHtml, escapeAttr, ROW_WARN_THRESHOLD, implicationForms,
+         columnTruth, classify, equivalenceGroups } from "./logic.js";
 
 export function render() {
   if (!app.state.tables.length) {
@@ -31,6 +32,23 @@ export function renderTable(table, index = 0, total = 1) {
       if (c) col.compiled = c;
     } catch (e) { col.error = e.message; }
   });
+
+  // Classify visible columns and find logically-equivalent groups. A column is
+  // "visible" when it has a compiled formula and is either Auto, or a Practice
+  // column that's been checked/revealed (so badges don't spoil the answer).
+  const isRevealed = (col) => col.results && Object.keys(col.results).length > 0;
+  const colVisible = (col) => !!col.compiled && (!col.practice || isRevealed(col));
+  const truthOf = {};   // colId -> boolean[]
+  const classOf = {};   // colId -> classification string
+  const eqItems = [];
+  table.columns.forEach((col) => {
+    if (!colVisible(col)) return;
+    const t = columnTruth(col.compiled.ast, varList);
+    truthOf[col.id] = t;
+    classOf[col.id] = classify(t);
+    eqItems.push({ id: col.id, truth: t });
+  });
+  const eqLabels = equivalenceGroups(eqItems); // Map(colId -> "A"/"B"…)
 
   const big = rows.length > ROW_WARN_THRESHOLD;
 
@@ -122,13 +140,34 @@ export function renderTable(table, index = 0, total = 1) {
       }
     }
 
+    // Tautology / Satisfiable / Unsatisfiable badge + equivalence chip (only
+    // for visible columns — Auto, or Practice once checked/revealed).
+    let badges = "";
+    if (colVisible(col)) {
+      const kind = classOf[col.id];
+      const label = kind === "tautology" ? "⊤ Tautology"
+                  : kind === "unsatisfiable" ? "⊥ Unsatisfiable" : "Satisfiable";
+      const tip = kind === "tautology" ? "True in every row — always true (a tautology)."
+                : kind === "unsatisfiable" ? "False in every row — a contradiction (unsatisfiable)."
+                : "True in some rows and false in others (satisfiable, not a tautology).";
+      let chip = "";
+      const eq = eqLabels.get(col.id);
+      if (eq) {
+        chip = '<span class="eq-chip" title="Logically equivalent to the other ≡ ' + eq +
+               ' column(s) — their truth columns match.">≡ ' + eq + "</span>";
+      }
+      badges = '<div class="badges">' +
+        '<span class="badge badge-' + kind + '" title="' + escapeAttr(tip) + '">' + label + "</span>" +
+        chip + "</div>";
+    }
+
     h += '<th><div class="col-head"><div class="head-row">' +
           '<input type="text" class="' + cls + '" data-table="' + tid + '" data-col="' + col.id + '" ' +
             'value="' + escapeAttr(col.expr || "") + '" placeholder="expr or blank" />' +
           '<button class="remove" data-table="' + tid + '" data-remove="' + col.id + '" ' +
             'title="Remove column">✕</button>' +
           '</div><div class="' + metaCls + '">' + metaTxt + '</div>' +
-          controls + coach + formsMenu + '</div></th>';
+          controls + coach + formsMenu + badges + '</div></th>';
   });
   h += "</tr></thead><tbody>";
 

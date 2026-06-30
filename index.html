@@ -66,6 +66,22 @@
     <a href="https://github.com/DalerRakhmetZade/truth-table-builder" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/DalerRakhmetZade/truth-table-builder/issues/new" target="_blank" rel="noopener">Report a bug / request a feature</a>
   </div>
+  <h3>Tautology, satisfiability &amp; equivalence</h3>
+  <div class="about-logic">
+    <p>Every compound proposition falls into one of three categories, based on its truth column:</p>
+    <ul>
+      <li><strong class="lg-taut">⊤ Tautology</strong> — true in <em>every</em> row (always true). E.g. <code>p ∨ ¬p</code>.</li>
+      <li><strong class="lg-unsat">⊥ Unsatisfiable</strong> — false in every row (a contradiction). E.g. <code>p ∧ ¬p</code>.</li>
+      <li><strong class="lg-sat">Satisfiable</strong> — true in at least one row. We use it here for formulas that are true in some rows and false in others.</li>
+    </ul>
+    <p class="about-how">Key relationships:</p>
+    <ul>
+      <li><code>P</code> is a tautology ⇔ <code>¬P</code> is unsatisfiable.</li>
+      <li><code>P</code> is unsatisfiable ⇔ <code>¬P</code> is a tautology.</li>
+      <li><code>P ≡ Q</code> (equivalent) ⇔ <code>P ↔ Q</code> is a tautology — i.e. their truth columns match. Equivalent columns share an <span class="eq-chip">≡ A</span> chip.</li>
+    </ul>
+    <p class="about-how">Asking “is this proposition satisfiable?” is the famous <strong>SAT</strong> problem in computer science.</p>
+  </div>
   <h3>What's new</h3>
   <div id="changelog" class="changelog"></div>
   <p class="about-credit">For CSCI S-20 and anyone learning logic. ✦</p>

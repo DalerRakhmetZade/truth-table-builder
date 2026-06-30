@@ -146,3 +146,33 @@
   .forms-item:hover { background: var(--mist); }
   .forms-name { font-size: 12px; font-weight: 700; color: var(--ink); }
   .forms-expr { font-size: 12px; color: var(--ash); }
+
+  /* ----- tautology / satisfiable / unsatisfiable badges + equivalence chip ----- */
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 6px;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--hairline);
+    white-space: nowrap;
+  }
+  .badge-tautology { color: var(--true); background: var(--true-bg); border-color: transparent; }
+  .badge-unsatisfiable { color: var(--false); background: var(--false-bg); border-color: transparent; }
+  .badge-satisfiable { color: var(--ash); background: var(--mist); }
+  .eq-chip {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    color: var(--signal-blue);
+    background: rgba(37, 118, 235, 0.10);
+    white-space: nowrap;
+    cursor: default;
+  }

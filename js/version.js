@@ -2,10 +2,21 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.4.0";
+export const APP_VERSION = "1.5.0";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.5.0",
+    date: "2026-06-29",
+    changes: [
+      "Every formula column now shows what kind of proposition it is: ⊤ Tautology (always true), ⊥ Unsatisfiable (always false), or Satisfiable (true in some rows).",
+      "Logically equivalent columns are flagged with a shared “≡” chip — e.g. an implication and its contrapositive line up.",
+      "In Practice mode the category/equivalence are hidden until you Check or Reveal, so they don't spoil the answer.",
+      "Added an “About logic” explainer (tautology, satisfiability, equivalence, and the SAT problem) to the About dialog.",
+      "You can now type ⊤ and ⊥ as the constants true and false.",
+    ],
+  },
   {
     version: "1.4.0",
     date: "2026-06-29",
