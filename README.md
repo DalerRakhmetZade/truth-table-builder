@@ -1,6 +1,6 @@
 # Truth Table Builder
 
-**Live demo:** https://polite-ground-0b993b60f.7.azurestaticapps.net/
+**Live demo:** [Truth Table Builder](https://truthtable.r-z.app/)
 
 A lightweight truth table tool for discrete math. **No build step** and no
 runtime dependencies — plain ES modules and CSS.
