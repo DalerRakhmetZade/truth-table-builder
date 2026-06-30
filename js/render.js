@@ -97,8 +97,9 @@ export function renderTable(table, index = 0, total = 1) {
       controls += "</div>";
     }
     const coach = col.compiled && col.practice
-      ? '<div class="coach ' + (col.summaryKind || "") + '" data-table="' + tid + '" data-col="' + col.id + '">' +
-          (col.summary || "&nbsp;") + "</div>"
+      ? '<div class="coach ' + (col.summaryKind || "") + (col.summary ? "" : " coach-empty") +
+          '" data-table="' + tid + '" data-col="' + col.id + '">' +
+          (col.summary || "") + "</div>"
       : "";
 
     // Converse / Inverse / Contrapositive — only for top-level implications.

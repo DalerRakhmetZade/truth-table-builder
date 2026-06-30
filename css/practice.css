@@ -52,6 +52,7 @@
     color: var(--fog);
     text-align: center;
   }
+  .coach:empty, .coach.coach-empty { display: none; }
   .coach.ok { color: var(--true); font-weight: 700; }
   .coach.warn { color: var(--false); font-weight: 600; }
   .coach.info { color: var(--signal-blue); font-weight: 600; }

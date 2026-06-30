@@ -2,7 +2,7 @@
 import { tablesEl, warnEl } from "./dom.js";
 import { app, getTable, getCol, makeTable, makeColumn, saveState, resetState } from "./store.js";
 import { compile, evalAst } from "./parser.js";
-import { generateRows, gradeColumn, syncVarNames, renameInExpr, escapeHtml, tableToText } from "./logic.js";
+import { generateRows, gradeColumn, syncVarNames, renameInExpr, tableToText } from "./logic.js";
 import { render } from "./render.js";
 import { confirmDialog, notify } from "./ui.js";
 
@@ -201,7 +201,7 @@ function setCoach(table, col, msg, kind) {
   col.summary = msg || "";
   col.summaryKind = kind || "";
   const el = coachEl(table, col);
-  if (el) { el.innerHTML = msg ? escapeHtml(msg) : "&nbsp;"; el.className = "coach " + (kind || ""); }
+  if (el) { el.textContent = msg || ""; el.className = "coach " + (kind || "") + (msg ? "" : " coach-empty"); }
 }
 
 // Restrict practice cells to T/F (t/f allowed); coach on anything else.
