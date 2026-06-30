@@ -76,6 +76,7 @@
   .note-tiles {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-auto-rows: 1fr;
     gap: 14px;
   }
   .note-tile {
@@ -97,7 +98,14 @@
   .note-tile:active { transform: translateY(1px); }
   .tile-title { font-size: var(--text-subheading); font-weight: 700; color: var(--ink); }
   .tile-blurb { font-size: 12px; color: var(--fog); line-height: 1.45; }
-  .tile-count { margin-top: 2px; font-size: 12px; font-weight: 600; color: var(--signal-blue); }
+  .tile-count {
+    margin-top: auto;
+    align-self: flex-end;
+    padding-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--signal-blue);
+  }
 
   /* back link (drill-in detail) */
   .notes-back {
