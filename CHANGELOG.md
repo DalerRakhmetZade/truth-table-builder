@@ -6,6 +6,10 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.7.1] — 2026-06-29
+- Fixed: typing a variable in a column expression now matches no matter the case (e.g. P matches P, p, or an older lowercase-stored variable).
+- Older tables made before the uppercase update now have their variable names normalized to uppercase on load.
+
 ## [1.7.0] — 2026-06-29
 - New “Study Notes” tab — a quick-reference cheat sheet you can return to (also at the #notes link).
 - Browse by group tiles, then drill into a topic; search finds any rule across all groups.
@@ -67,6 +71,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.7.1]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.7.1
 [1.7.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.7.0
 [1.6.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.6.0
 [1.5.1]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.5.1

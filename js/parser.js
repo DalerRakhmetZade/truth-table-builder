@@ -13,8 +13,14 @@ export const T = {
   IMP: "IMP", IFF: "IFF", LP: "LP", RP: "RP", CONST: "CONST",
 };
 
-export function tokenize(input, varSet) {
-  varSet = varSet || new Set();
+export function tokenize(input, varMap) {
+  // varMap: Map of UPPERCASE name -> canonical (table) name, for case-insensitive
+  // matching. (A plain Set/array is also accepted for convenience.)
+  if (!(varMap instanceof Map)) {
+    const m = new Map();
+    for (const v of (varMap || [])) m.set(String(v).toUpperCase(), v);
+    varMap = m;
+  }
   const tokens = [];
   let i = 0;
   const s = input;
@@ -54,8 +60,7 @@ export function tokenize(input, varSet) {
       if (upper === "T") { tokens.push({ t: T.CONST, v: true }); continue; }
       if (upper === "F") { tokens.push({ t: T.CONST, v: false }); continue; }
       // variables match case-insensitively; store the canonical (table) name
-      if (varSet.has(name)) { tokens.push({ t: T.VAR, name: name }); continue; }
-      if (varSet.has(upper)) { tokens.push({ t: T.VAR, name: upper }); continue; }
+      if (varMap.has(upper)) { tokens.push({ t: T.VAR, name: varMap.get(upper) }); continue; }
       throw new Error("“" + name + "” isn't one of this table's variables.");
     }
     throw new Error("Unexpected character “" + ch + "”.");
@@ -135,7 +140,7 @@ function describeToken(tok) {
 export function compile(expr, varList) {
   const trimmed = (expr || "").trim();
   if (!trimmed) return null;
-  const ast = parse(tokenize(trimmed, new Set(varList || [])));
+  const ast = parse(tokenize(trimmed, varList || []));
   const vars = new Set();
   collectVars(ast, vars);
   return { ast, vars };

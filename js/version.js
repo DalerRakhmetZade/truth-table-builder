@@ -2,10 +2,18 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.7.0";
+export const APP_VERSION = "1.7.1";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.7.1",
+    date: "2026-06-29",
+    changes: [
+      "Fixed: typing a variable in a column expression now matches no matter the case (e.g. P matches P, p, or an older lowercase-stored variable).",
+      "Older tables made before the uppercase update now have their variable names normalized to uppercase on load.",
+    ],
+  },
   {
     version: "1.7.0",
     date: "2026-06-29",

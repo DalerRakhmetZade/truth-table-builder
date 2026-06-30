@@ -187,7 +187,9 @@ export function normalizeState(state) {
     if (typeof t.varCount !== "number" || t.varCount < 1) t.varCount = 1;
     if (t.varCount > MAX_VARS) t.varCount = MAX_VARS;
     if (!Array.isArray(t.columns)) t.columns = [];
-    t.varNames = syncVarNames(t.varNames, t.varCount);
+    // variables are canonically uppercase (T/F excluded); upgrade older tables
+    t.varNames = syncVarNames(t.varNames, t.varCount)
+      .map((v) => String(v).toUpperCase());
     if (typeof t.id !== "number") t.id = maxTableId + 1;
     maxTableId = Math.max(maxTableId, t.id);
     t.columns.forEach((c) => { maxColId = Math.max(maxColId, c.id || 0); });

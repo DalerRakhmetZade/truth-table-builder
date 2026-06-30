@@ -64,6 +64,7 @@
     width: 150px;
     text-align: center;
     font-size: 14px;
+    text-transform: uppercase;
   }
   .col-head .expr-input.invalid { border-color: var(--false); color: var(--false); }
   .col-head .head-row { display: flex; gap: 6px; align-items: center; justify-content: center; }

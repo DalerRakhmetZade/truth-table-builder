@@ -81,9 +81,12 @@ test("variable matching is case-insensitive", () => {
   // lowercase typed against uppercase table variables
   assert.equal(column("p → q", ["P", "Q"]), column("P → Q", ["P", "Q"]));
   assert.equal(column("p ∧ q", ["P", "Q"]), "TFFF");
+  // and uppercase typed against lowercase-stored variables (the reverse)
+  assert.equal(column("P ∧ Q", ["p", "q"]), "TFFF");
+  assert.equal(column("P → q", ["p", "q"]), column("p → q", ["p", "q"]));
   // collectVars reports the canonical (table) name
-  const c = compile("p ∧ q", ["P", "Q"]);
-  assert.deepEqual([...c.vars].sort(), ["P", "Q"]);
+  assert.deepEqual([...compile("p ∧ q", ["P", "Q"]).vars].sort(), ["P", "Q"]);
+  assert.deepEqual([...compile("P ∧ Q", ["p", "q"]).vars].sort(), ["p", "q"]);
 });
 
 test("T and F are always the true/false constants (any case)", () => {

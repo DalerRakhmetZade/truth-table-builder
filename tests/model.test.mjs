@@ -82,6 +82,12 @@ test("normalizeState clamps oversized varCount to MAX_VARS", () => {
   assert.equal(out.tables[0].varNames.length, MAX_VARS);
 });
 
+test("normalizeState upgrades lowercase variable names to uppercase", () => {
+  const state = { tables: [{ id: 1, title: "Old", varCount: 2, varNames: ["p", "q"], columns: [] }] };
+  const { state: out } = normalizeState(state);
+  assert.deepEqual(out.tables[0].varNames, ["P", "Q"]);
+});
+
 test("renameInExpr replaces whole identifiers only", () => {
   assert.equal(renameInExpr("p → (q ∧ ¬p)", "p", "rain"), "rain → (q ∧ ¬rain)");
   assert.equal(renameInExpr("pq ∧ p", "p", "x"), "pq ∧ x");
