@@ -43,15 +43,19 @@ export function tokenize(input, varSet) {
     if (ch === "1") { tokens.push({ t: T.CONST, v: true }); i++; continue; }
     if (ch === "0") { tokens.push({ t: T.CONST, v: false }); i++; continue; }
 
-    // identifier: variable name (may be multi-character)
+    // identifier: variable name (may be multi-character), matched case-insensitively
     if (/[A-Za-z_]/.test(ch)) {
       let j = i + 1;
       while (j < s.length && /[A-Za-z0-9_]/.test(s[j])) j++;
       const name = s.slice(i, j);
+      const upper = name.toUpperCase();
       i = j;
+      // T and F are reserved for the true/false constants (never variables)
+      if (upper === "T") { tokens.push({ t: T.CONST, v: true }); continue; }
+      if (upper === "F") { tokens.push({ t: T.CONST, v: false }); continue; }
+      // variables match case-insensitively; store the canonical (table) name
       if (varSet.has(name)) { tokens.push({ t: T.VAR, name: name }); continue; }
-      if (name === "T") { tokens.push({ t: T.CONST, v: true }); continue; }
-      if (name === "F") { tokens.push({ t: T.CONST, v: false }); continue; }
+      if (varSet.has(upper)) { tokens.push({ t: T.VAR, name: upper }); continue; }
       throw new Error("“" + name + "” isn't one of this table's variables.");
     }
     throw new Error("Unexpected character “" + ch + "”.");

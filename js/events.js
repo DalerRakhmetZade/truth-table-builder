@@ -2,7 +2,7 @@
 import { tablesEl, warnEl } from "./dom.js";
 import { app, getTable, getCol, makeTable, makeColumn, saveState, resetState } from "./store.js";
 import { compile, evalAst } from "./parser.js";
-import { generateRows, gradeColumn, syncVarNames, renameInExpr, tableToText, MAX_VARS } from "./logic.js";
+import { generateRows, gradeColumn, syncVarNames, renameInExpr, tableToText, MAX_VARS, RESERVED_NAMES } from "./logic.js";
 import { render } from "./render.js";
 import { confirmDialog, notify } from "./ui.js";
 
@@ -303,12 +303,15 @@ function handleRename(input) {
   const table = getTable(input.dataset.table); if (!table) return;
   const vi = Number(input.dataset.var);
   const oldName = table.varNames[vi];
-  const newName = input.value.trim();
+  const newName = input.value.trim().toUpperCase(); // variables are uppercase
   const valid = /^[A-Za-z_][A-Za-z0-9_]*$/.test(newName);
+  const reserved = RESERVED_NAMES.includes(newName);
   const dupe = table.varNames.some((nm, i) => i !== vi && nm === newName);
-  if (!valid || dupe) {
+  if (!valid || reserved || dupe) {
     warnEl.textContent = !valid
       ? "Invalid name “" + newName + "”. Use a letter/underscore, then letters, digits or underscores (no spaces or operators)."
+      : reserved
+      ? "“" + newName + "” is reserved for the constant " + (newName === "T" ? "true" : "false") + " — pick another name."
       : "“" + newName + "” is already used by another variable in this table.";
     warnEl.classList.add("show");
     render();

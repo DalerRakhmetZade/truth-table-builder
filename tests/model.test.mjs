@@ -18,17 +18,19 @@ test("generateRows: 3 variables = 8 rows", () => {
   assert.equal(generateRows(["a", "b", "c"]).length, 8);
 });
 
-test("syncVarNames grows with defaults and shrinks preserving names", () => {
-  assert.deepEqual(syncVarNames([], 3), ["p", "q", "r"]);
-  assert.deepEqual(syncVarNames(["x"], 3), ["x", "q", "r"]);
+test("syncVarNames grows with uppercase defaults and shrinks preserving names", () => {
+  assert.deepEqual(syncVarNames([], 3), ["P", "Q", "R"]);
+  assert.deepEqual(syncVarNames(["x"], 3), ["x", "Q", "R"]);
   assert.deepEqual(syncVarNames(["a", "b", "c", "d"], 2), ["a", "b"]);
-  assert.deepEqual(syncVarNames(null, 2), ["p", "q"]);
+  assert.deepEqual(syncVarNames(null, 2), ["P", "Q"]);
 });
 
-test("defaultName falls back past the alphabet list", () => {
-  assert.equal(defaultName(0), "p");
-  assert.equal(defaultName(13), "c");
-  assert.equal(defaultName(14), "v15");
+test("defaultName: uppercase, skips T and F, falls back past the list", () => {
+  assert.equal(defaultName(0), "P");
+  assert.equal(defaultName(4), "U");           // 5th default skips T
+  assert.ok(!["T", "F"].includes(defaultName(3)));
+  assert.equal(defaultName(13), "D");
+  assert.equal(defaultName(14), "V15");
 });
 
 test("migrateState migrates the old single-table format", () => {

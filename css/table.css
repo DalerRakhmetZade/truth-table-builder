@@ -30,6 +30,7 @@
     border-radius: var(--radius-control);
     padding: 5px 4px;
     font-family: inherit;
+    text-transform: uppercase;
   }
   .var-input:hover { border-color: var(--hairline); }
   .var-input:focus { border-color: var(--signal-blue); color: var(--ink); outline: none; }

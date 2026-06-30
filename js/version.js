@@ -2,10 +2,20 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.5.1";
+export const APP_VERSION = "1.6.0";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.6.0",
+    date: "2026-06-29",
+    changes: [
+      "Variables are now capital letters (P, Q, R, S, …) by default, matching how they're written in class.",
+      "Variable names are automatically capitalized — no need to change them by hand.",
+      "Expressions are case-insensitive: type p or P, it's the same variable.",
+      "T and F stay reserved for the true/false constants (you can't name a variable T or F).",
+    ],
+  },
   {
     version: "1.5.1",
     date: "2026-06-29",

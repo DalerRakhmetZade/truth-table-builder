@@ -16,7 +16,7 @@ test("makeTable has a sane default title matching its id", () => {
   assert.equal(typeof t.id, "number");
   assert.equal(t.title, "Table " + t.id);
   assert.equal(t.varCount, 2);
-  assert.deepEqual(t.varNames, ["p", "q"]);
+  assert.deepEqual(t.varNames, ["P", "Q"]);
   assert.deepEqual(t.columns, []);
 });
 

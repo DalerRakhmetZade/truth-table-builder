@@ -77,6 +77,25 @@ test("multi-character and digit-bearing variable names", () => {
   assert.equal(column("is_wet ∧ rain", ["is_wet", "rain"]), column("p ∧ q", PQ));
 });
 
+test("variable matching is case-insensitive", () => {
+  // lowercase typed against uppercase table variables
+  assert.equal(column("p → q", ["P", "Q"]), column("P → Q", ["P", "Q"]));
+  assert.equal(column("p ∧ q", ["P", "Q"]), "TFFF");
+  // collectVars reports the canonical (table) name
+  const c = compile("p ∧ q", ["P", "Q"]);
+  assert.deepEqual([...c.vars].sort(), ["P", "Q"]);
+});
+
+test("T and F are always the true/false constants (any case)", () => {
+  assert.equal(column("T", []), "T");
+  assert.equal(column("t", []), "T");
+  assert.equal(column("F", []), "F");
+  assert.equal(column("f", []), "F");
+  // even when there are variables, T/F stay constant
+  assert.equal(column("P ∨ t", ["P"]), "TT");
+  assert.equal(column("P ∧ f", ["P"]), "FF");
+});
+
 test("empty expression compiles to null", () => {
   assert.equal(compile("", PQ), null);
   assert.equal(compile("   ", PQ), null);

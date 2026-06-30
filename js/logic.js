@@ -2,8 +2,11 @@
 // state migration/normalization, and plain-text export. No DOM, no storage.
 import { compile, evalAst } from "./parser.js";
 
-export const DEFAULT_VAR_NAMES = ["p","q","r","s","t","u","v","w","x","y","z","a","b","c"];
+// Uppercase variable names, excluding T and F (reserved for the true/false
+// constants). With at most 5 variables we never run out.
+export const DEFAULT_VAR_NAMES = ["P","Q","R","S","U","V","W","X","Y","Z","A","B","C","D"];
 export const MAX_VARS = 5; // 2^5 = 32 rows; beyond this the table grows too fast
+export const RESERVED_NAMES = ["T", "F"]; // reserved for the true/false constants
 
 export function escapeHtml(s) {
   return String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
@@ -14,7 +17,7 @@ export function escapeAttr(s) {
 export function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
 
 export function defaultName(i) {
-  return i < DEFAULT_VAR_NAMES.length ? DEFAULT_VAR_NAMES[i] : "v" + (i + 1);
+  return i < DEFAULT_VAR_NAMES.length ? DEFAULT_VAR_NAMES[i] : "V" + (i + 1);
 }
 
 // Resize a names array to length n, filling new slots with sensible defaults.

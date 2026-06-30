@@ -6,6 +6,12 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.6.0] — 2026-06-29
+- Variables are now capital letters (P, Q, R, S, …) by default, matching how they're written in class.
+- Variable names are automatically capitalized — no need to change them by hand.
+- Expressions are case-insensitive: type p or P, it's the same variable.
+- T and F stay reserved for the true/false constants (you can't name a variable T or F).
+
 ## [1.5.1] — 2026-06-29
 - Capped tables at 5 variables — the row count doubles with each variable (2⁵ = 32 rows), so this keeps tables fast and readable.
 
@@ -56,6 +62,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.6.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.6.0
 [1.5.1]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.5.1
 [1.5.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.5.0
 [1.4.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.4.0
