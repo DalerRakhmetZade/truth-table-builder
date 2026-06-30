@@ -6,6 +6,9 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.5.1] — 2026-06-29
+- Capped tables at 5 variables — the row count doubles with each variable (2⁵ = 32 rows), so this keeps tables fast and readable.
+
 ## [1.5.0] — 2026-06-29
 - Every formula column now shows what kind of proposition it is: ⊤ Tautology (always true), ⊥ Unsatisfiable (always false), or Satisfiable (true in some rows).
 - Logically equivalent columns are flagged with a shared “≡” chip — e.g. an implication and its contrapositive line up.
@@ -53,6 +56,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.5.1]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.5.1
 [1.5.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.5.0
 [1.4.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.4.0
 [1.3.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.3.0

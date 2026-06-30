@@ -3,7 +3,7 @@
 import { compile, evalAst } from "./parser.js";
 
 export const DEFAULT_VAR_NAMES = ["p","q","r","s","t","u","v","w","x","y","z","a","b","c"];
-export const ROW_WARN_THRESHOLD = 1024; // 2^10
+export const MAX_VARS = 5; // 2^5 = 32 rows; beyond this the table grows too fast
 
 export function escapeHtml(s) {
   return String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
@@ -182,6 +182,7 @@ export function normalizeState(state) {
   let maxTableId = 0, maxColId = 0;
   (state.tables || []).forEach((t) => {
     if (typeof t.varCount !== "number" || t.varCount < 1) t.varCount = 1;
+    if (t.varCount > MAX_VARS) t.varCount = MAX_VARS;
     if (!Array.isArray(t.columns)) t.columns = [];
     t.varNames = syncVarNames(t.varNames, t.varCount);
     if (typeof t.id !== "number") t.id = maxTableId + 1;

@@ -2,10 +2,17 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.5.0";
+export const APP_VERSION = "1.5.1";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.5.1",
+    date: "2026-06-29",
+    changes: [
+      "Capped tables at 5 variables — the row count doubles with each variable (2⁵ = 32 rows), so this keeps tables fast and readable.",
+    ],
+  },
   {
     version: "1.5.0",
     date: "2026-06-29",

@@ -2,7 +2,7 @@
 import { tablesEl, warnEl } from "./dom.js";
 import { app, getTable, getCol, makeTable, makeColumn, saveState, resetState } from "./store.js";
 import { compile, evalAst } from "./parser.js";
-import { generateRows, gradeColumn, syncVarNames, renameInExpr, tableToText } from "./logic.js";
+import { generateRows, gradeColumn, syncVarNames, renameInExpr, tableToText, MAX_VARS } from "./logic.js";
 import { render } from "./render.js";
 import { confirmDialog, notify } from "./ui.js";
 
@@ -327,7 +327,16 @@ function handleVarCount(input) {
   const table = getTable(input.dataset.table); if (!table) return;
   let n = parseInt(input.value, 10);
   if (isNaN(n) || n < 1) n = 1;
-  if (n > 14) n = 14;
+  if (n > MAX_VARS) {
+    n = MAX_VARS;
+    warnEl.textContent = "Up to " + MAX_VARS + " variables — that's already " +
+      (1 << MAX_VARS) + " rows, and each extra variable doubles them.";
+    warnEl.classList.add("show");
+    clearTimeout(handleVarCount._t);
+    handleVarCount._t = setTimeout(() => warnEl.classList.remove("show"), 4000);
+  } else {
+    warnEl.classList.remove("show");
+  }
   table.varCount = n;
   table.varNames = syncVarNames(table.varNames, n);
   render();

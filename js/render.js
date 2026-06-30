@@ -2,7 +2,7 @@
 import { tablesEl } from "./dom.js";
 import { app, saveState } from "./store.js";
 import { compile, evalAst } from "./parser.js";
-import { generateRows, escapeHtml, escapeAttr, ROW_WARN_THRESHOLD, implicationForms,
+import { generateRows, escapeHtml, escapeAttr, MAX_VARS, implicationForms,
          columnTruth, classify, equivalenceGroups } from "./logic.js";
 
 export function render() {
@@ -50,8 +50,6 @@ export function renderTable(table, index = 0, total = 1) {
   });
   const eqLabels = equivalenceGroups(eqItems); // Map(colId -> "A"/"B"…)
 
-  const big = rows.length > ROW_WARN_THRESHOLD;
-
   let h = '<div class="card" data-table="' + tid + '">';
 
   // reorder arrows (only when there's more than one table)
@@ -74,17 +72,14 @@ export function renderTable(table, index = 0, total = 1) {
           'value="' + escapeAttr(table.title || "") + '" placeholder="Untitled table" />' +
         '<div class="group"><label>Variables</label>' +
           '<input type="number" class="varcount-input" data-table="' + tid + '" ' +
-          'min="1" max="14" value="' + table.varCount + '" /></div>' +
+          'min="1" max="' + MAX_VARS + '" value="' + table.varCount + '" ' +
+          'title="1–' + MAX_VARS + ' variables (rows = 2ⁿ)" /></div>' +
         '<div class="group">' +
           '<button class="primary" data-action="addcol" data-table="' + tid + '">+ Column</button>' +
           '<button class="ghost" data-action="copy" data-table="' + tid + '">Copy</button>' +
           '<button class="ghost remove-table" data-action="removetable" data-table="' + tid + '">Remove</button>' +
         '</div>' +
       '</div>';
-
-  h += '<div class="card-warn' + (big ? " show" : "") + '">' +
-        (big ? ("Heads up: " + varList.length + " variables = " + rows.length +
-          " rows. Large tables may be slow.") : "") + '</div>';
 
   h += '<div class="card-body"><table><thead><tr>';
   varList.forEach((v, vi) => {

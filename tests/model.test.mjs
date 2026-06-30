@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   generateRows, syncVarNames, defaultName, renameInExpr, tableToText,
-  migrateState, normalizeState,
+  migrateState, normalizeState, MAX_VARS,
 } from "../js/logic.js";
 
 test("generateRows: count, ordering, MSB-first, top all-true", () => {
@@ -71,6 +71,13 @@ test("normalizeState repairs malformed tables and reports next ids", () => {
   assert.ok(Array.isArray(t.varNames) && t.varNames.length === t.varCount);
   assert.equal(nextTableId, 3);
   assert.equal(nextColId, 1);
+});
+
+test("normalizeState clamps oversized varCount to MAX_VARS", () => {
+  const state = { tables: [{ id: 1, title: "Big", varCount: 14, columns: [] }] };
+  const { state: out } = normalizeState(state);
+  assert.equal(out.tables[0].varCount, MAX_VARS);
+  assert.equal(out.tables[0].varNames.length, MAX_VARS);
 });
 
 test("renameInExpr replaces whole identifiers only", () => {
