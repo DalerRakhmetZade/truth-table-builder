@@ -27,6 +27,9 @@
 //       { kind: "infer", name: "Modus ponens",
 //         premises: ["A", "A → B"], conclusion: "B", note: "..." }
 //       → renders   Name:  A , A → B  ⊢  B   (note is optional, shown muted)
+//   • form → strategy map (two-column reference):
+//       { kind: "map", name: "...", rows: [ { from: "∀x. P(x)", to: "Let x be arbitrary…" } ], note: "..." }
+//       → renders each row as   formula → prose   (note is optional, shown muted)
 //
 // TEMPLATE — copy a block and fill it in:
 //   {
@@ -87,6 +90,39 @@ export const NOTES = [
         note: "Modus ponens on the contrapositive: A → B ≡ ¬B → ¬A, then ¬B gives ¬A." },
       { kind: "infer", name: "And-elimination", premises: ["A ∧ B"], conclusion: "A",
         note: "If both are true you can conclude either one alone — likewise A ∧ B ⊢ B." },
+    ],
+  },
+  {
+    id: "direct-proofs",
+    title: "Direct Proofs",
+    blurb: "Reason straight from the givens to the conclusion — the workhorse strategy, driven by modus ponens and modus tollens.",
+    tileLabel: "Checklist + strategies",
+    cards: [
+      { kind: "text", title: "The idea",
+        body: "A direct proof reasons forward from what you're given to what you want, one justified step at a time. The engine is modus ponens (from A and A → B, conclude B) and modus tollens (from ¬B and A → B, conclude ¬A) — see the Inference Rules notes." },
+      { kind: "text", title: "Direct proof checklist",
+        body: "Work these on scratch paper before writing a single line of proof:" },
+      { kind: "step", n: 1, title: "Identify givens",
+        detail: "What facts are you given? What can you assume? Write them down." },
+      { kind: "step", n: 2, title: "Gather definitions",
+        detail: "If the claim mentions \"rational,\" \"even,\" \"prime,\" \"divides,\" etc., write down the formal definition. Definitions give you variables to work with and structure to exploit." },
+      { kind: "step", n: 3, title: "Determine the logical structure",
+        detail: "Express the claim as a predicate-logic formula (or at least recognize its form). Is it a universal? An implication? An existential? A combination? Note how each variable is quantified and over what domain (ℤ, ℝ, ℚ, ℕ, …)." },
+      { kind: "step", n: 4, title: "Identify what you need to show",
+        detail: "What does the conclusion look like formally? This is your finish line — knowing where you must end up guides your reasoning." },
+      { kind: "step", n: 5, title: "Explore with examples",
+        detail: "Plug in specific values. Try to break the claim. Understand why it's true — or discover that it's false." },
+      { kind: "step", n: 6, title: "Select a proof strategy",
+        detail: "Choose based on the logical structure (see the chart below). Strategies are often combined for claims that mix several logical forms." },
+      { kind: "step", n: 7, title: "Write the proof",
+        detail: "State the claim, introduce variables, reason step by step, and conclude explicitly." },
+      { kind: "map", name: "Choosing a strategy by logical form", rows: [
+        { from: "∀x. P(x)", to: "Let x be an arbitrary element of the domain. Show P(x)." },
+        { from: "P → Q", to: "Assume P. Deduce Q." },
+        { from: "∃x. P(x)", to: "Exhibit a specific x. Verify P(x)." },
+        { from: "¬∀x. P(x)", to: "Find a counterexample: a specific x where P(x) fails." },
+        { from: "¬∃x. P(x)", to: "Prove ∀x. ¬P(x) using the universal strategy." },
+      ], note: "These combine: a claim like ∀x. (P(x) → Q(x)) uses the universal strategy, then the implication strategy inside." },
     ],
   },
   {

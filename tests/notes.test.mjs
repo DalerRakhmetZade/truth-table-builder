@@ -47,6 +47,12 @@ test("every card has the required fields for its kind", () => {
         assert.ok(Array.isArray(card.premises) && card.premises.length > 0, sec.id + ": infer needs premises");
         for (const p of card.premises) assert.equal(typeof p, "string");
         assert.equal(typeof card.conclusion, "string", sec.id + ": infer needs conclusion");
+      } else if (kind === "map") {
+        assert.ok(Array.isArray(card.rows) && card.rows.length > 0, sec.id + ": map needs rows");
+        for (const r of card.rows) {
+          assert.equal(typeof r.from, "string");
+          assert.equal(typeof r.to, "string");
+        }
       } else {
         assert.fail("unknown card kind: " + kind);
       }

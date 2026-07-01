@@ -155,6 +155,16 @@
   .equiv-sign { color: var(--signal-blue); font-weight: 800; font-size: 15px; }
   .infer-sep { color: var(--fog); font-weight: 600; margin: 0 -4px; }
 
+  .note-map { display: flex; flex-direction: column; gap: 8px; }
+  .note-map-row {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+  .note-map-arrow { color: var(--signal-blue); font-weight: 800; }
+  .note-map-to { font-size: 13px; color: var(--ink); line-height: 1.45; }
+
   /* algorithm steps */
   .note-card.step { padding-left: 16px; }
   .note-step-head { display: flex; align-items: center; gap: 10px; }

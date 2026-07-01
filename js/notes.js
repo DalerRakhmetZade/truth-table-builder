@@ -23,6 +23,11 @@ function cardSearchText(card) {
     return ((card.name || "") + " " + (card.premises || []).join(" ") + " " +
       (card.conclusion || "") + " " + (card.note || "")).toLowerCase();
   }
+  if (card.kind === "map") {
+    return ((card.name || "") + " " +
+      (card.rows || []).map((r) => r.from + " " + r.to).join(" ") + " " +
+      (card.note || "")).toLowerCase();
+  }
   const rows = equivRows(card).map((r) => r.lhs + " " + r.rhs).join(" ");
   return ((card.name || "") + " " + rows + " " + (card.note || "")).toLowerCase();
 }
@@ -46,6 +51,19 @@ function cardHtml(card) {
     return '<div class="note-card">' +
       (card.title ? '<div class="note-name">' + escapeHtml(card.title) + "</div>" : "") +
       '<div class="note-note">' + escapeHtml(card.body || "") + "</div>" +
+    "</div>";
+  }
+  if (card.kind === "map") {
+    const rows = (card.rows || []).map((r) =>
+      '<div class="note-map-row">' +
+        '<code class="formula">' + escapeHtml(r.from) + "</code>" +
+        '<span class="note-map-arrow">→</span>' +
+        '<span class="note-map-to">' + escapeHtml(r.to) + "</span>" +
+      "</div>").join("");
+    return '<div class="note-card">' +
+      '<div class="note-name">' + escapeHtml(card.name || "") + "</div>" +
+      '<div class="note-map">' + rows + "</div>" +
+      (card.note ? '<div class="note-note">' + escapeHtml(card.note) + "</div>" : "") +
     "</div>";
   }
   if (card.kind === "infer") {
@@ -72,12 +90,22 @@ function cardHtml(card) {
   "</div>";
 }
 
+function tileCountLabel(sec) {
+  if (sec.tileLabel) return sec.tileLabel;
+  // Definitions / prose (text cards) aren't rules — don't count them.
+  const items = sec.cards.filter((c) => (c.kind || "equiv") !== "text");
+  const n = items.length;
+  if (!n) return "Open";
+  const allSteps = items.every((c) => c.kind === "step");
+  const noun = allSteps ? "step" : "rule";
+  return n + " " + noun + (n === 1 ? "" : "s");
+}
+
 function tileHtml(sec) {
-  const n = sec.cards.length;
   return '<button class="note-tile" data-group="' + escapeHtml(sec.id) + '">' +
     '<span class="tile-title">' + escapeHtml(sec.title) + "</span>" +
     (sec.blurb ? '<span class="tile-blurb">' + escapeHtml(sec.blurb) + "</span>" : "") +
-    '<span class="tile-count">' + n + (n === 1 ? " rule" : " rules") + ' →</span>' +
+    '<span class="tile-count">' + escapeHtml(tileCountLabel(sec)) + ' →</span>' +
   "</button>";
 }
 
