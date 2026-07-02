@@ -208,18 +208,26 @@ function gradeCard(remembered) {
 }
 
 // Animate the current card off-screen, then grade it.
-function flingCard(remembered) {
+function flingCard(remembered, fromDx) {
   if (studyBusy || !studyQueue.length) return;
   const el = rootEl.querySelector('[data-role="swipe"]');
   if (!el) { gradeCard(remembered); return; }
   studyBusy = true;
   const dir = remembered ? 1 : -1;
+  const offX = dir * ((window.innerWidth || 600) + 120);
   el.classList.add(remembered ? "swipe-right" : "swipe-left");
   el.style.setProperty("--swipe-progress", "1");
-  el.style.transition = "transform 0.28s ease-out, opacity 0.28s ease-out";
-  el.style.transform = "translateX(" + (dir * (window.innerWidth || 600)) + "px) rotate(" + (dir * 10) + "deg)";
+  // Start from wherever the finger left off, then continue off-screen.
+  el.style.transition = "none";
+  if (typeof fromDx === "number") {
+    el.style.transform = "translateX(" + fromDx + "px) rotate(" + (fromDx * 0.05) + "deg)";
+    // force a reflow so the next transform animates from here
+    void el.offsetWidth;
+  }
+  el.style.transition = "transform 0.26s ease-out, opacity 0.26s ease-out";
+  el.style.transform = "translateX(" + offX + "px) rotate(" + (dir * 12) + "deg)";
   el.style.opacity = "0";
-  setTimeout(() => { studyBusy = false; gradeCard(remembered); }, 240);
+  setTimeout(() => { studyBusy = false; gradeCard(remembered); }, 230);
 }
 
 /* ---- pointer-drag swipe controller ---- */
@@ -229,38 +237,58 @@ function onPointerDown(e) {
   if (view !== "study" || studyBusy) return;
   const el = e.target.closest('[data-role="swipe"]');
   if (!el || e.target.closest("button")) return;
-  drag = { startX: e.clientX, startY: e.clientY, dx: 0, decided: false, horizontal: false, moved: false, el };
+  // Kill any leftover release transition so the card tracks the finger 1:1.
+  el.style.transition = "none";
+  el.style.willChange = "transform";
+  try { el.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+  drag = {
+    pointerId: e.pointerId, startX: e.clientX, startY: e.clientY,
+    dx: 0, decided: false, horizontal: false,
+    lastX: e.clientX, lastT: e.timeStamp || performance.now(), vx: 0, el,
+  };
 }
 
 function onPointerMove(e) {
-  if (!drag) return;
+  if (!drag || e.pointerId !== drag.pointerId) return;
   const dx = e.clientX - drag.startX;
   const dy = e.clientY - drag.startY;
-  if (!drag.decided && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+  if (!drag.decided && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
     drag.decided = true;
-    drag.horizontal = Math.abs(dx) > Math.abs(dy);
+    drag.horizontal = Math.abs(dx) >= Math.abs(dy);
   }
-  if (drag.decided && drag.horizontal) {
-    if (e.cancelable) e.preventDefault();
-    drag.dx = dx;
-    drag.moved = true;
-    drag.el.style.transform = "translateX(" + dx + "px) rotate(" + (dx * 0.04) + "deg)";
-    drag.el.classList.toggle("swipe-right", dx > 0);
-    drag.el.classList.toggle("swipe-left", dx < 0);
-    drag.el.style.setProperty("--swipe-progress", String(Math.min(Math.abs(dx) / SWIPE_THRESHOLD, 1)));
-  }
+  if (!drag.decided || !drag.horizontal) return;
+  if (e.cancelable) e.preventDefault();
+  // track velocity (px/ms) for flick detection
+  const now = e.timeStamp || performance.now();
+  const dt = now - drag.lastT;
+  if (dt > 0) drag.vx = (e.clientX - drag.lastX) / dt;
+  drag.lastX = e.clientX; drag.lastT = now;
+  drag.dx = dx;
+  drag.el.style.transform = "translateX(" + dx + "px) rotate(" + (dx * 0.05) + "deg)";
+  drag.el.classList.toggle("swipe-right", dx > 0);
+  drag.el.classList.toggle("swipe-left", dx < 0);
+  drag.el.style.setProperty("--swipe-progress", String(Math.min(Math.abs(dx) / SWIPE_THRESHOLD, 1)));
 }
 
-function onPointerUp() {
-  if (!drag) return;
+function onPointerUp(e) {
+  if (!drag || (e && e.pointerId !== drag.pointerId)) return;
   const d = drag;
   drag = null;
-  if (d.decided && d.horizontal && Math.abs(d.dx) >= SWIPE_THRESHOLD) {
-    flingCard(d.dx > 0);
-  } else if (!d.decided) {
-    flipStudy();                         // treated as a tap
+  d.el.style.willChange = "";
+  try { d.el.releasePointerCapture(d.pointerId); } catch (err) { /* ignore */ }
+
+  if (!d.decided || !d.horizontal) {
+    d.el.style.transition = "";
+    d.el.style.transform = "";
+    flipStudy();                          // a tap (no real drag) flips the card
+    return;
+  }
+  // Commit on release if dragged far enough OR flicked fast enough.
+  const flicked = Math.abs(d.vx) > 0.5 && Math.abs(d.dx) > 24;
+  if (Math.abs(d.dx) >= SWIPE_THRESHOLD || flicked) {
+    flingCard(d.dx > 0, d.dx);
   } else {
-    d.el.style.transition = "transform 0.2s ease";
+    d.el.style.transition = "transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
     d.el.style.transform = "";
     d.el.classList.remove("swipe-left", "swipe-right");
   }
