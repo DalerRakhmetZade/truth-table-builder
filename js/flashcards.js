@@ -131,15 +131,11 @@ function renderStudy() {
   studySeen.add(card.id);
   rootEl.innerHTML =
     '<button class="fc-back" data-action="fc-deck">← ' + escapeHtml(deck.title) + "</button>" +
-    '<div class="fc-study-bar">' +
-      '<span class="fc-progress">' + studySeen.size + " / " + studyTotal + " seen</span>" +
-      '<span class="fc-stats">' +
-        '<span class="fc-stat cleared" title="Cleared — you knew these">✓ ' + studyCleared + "</span>" +
-        '<span class="fc-stat review" title="Waiting to come back">↻ ' + studyReview.size + "</span>" +
-      "</span>" +
-      '<button class="fc-mini" data-action="fc-shuffle">Shuffle</button>' +
-    "</div>" +
     '<div class="fc-study-body">' +
+      '<div class="fc-study-bar">' +
+        '<span class="fc-progress">' + studySeen.size + " / " + studyTotal + " seen</span>" +
+        '<button class="fc-mini" data-action="fc-shuffle">Shuffle</button>' +
+      "</div>" +
       '<div class="fc-swipe" data-role="swipe">' +
         '<div class="fc-swipe-overlay left">Review</div>' +
         '<div class="fc-swipe-overlay right">Got it</div>' +
@@ -157,6 +153,10 @@ function renderStudy() {
             '<span class="fc-face-hint">← review · got it →</span>' +
           "</div>" +
         "</div>" +
+      "</div>" +
+      '<div class="fc-stats">' +
+        '<span class="fc-stat cleared" title="Cleared — you knew these">✓ ' + studyCleared + "</span>" +
+        '<span class="fc-stat review" title="Waiting to come back">↻ ' + studyReview.size + "</span>" +
       "</div>" +
       '<p class="fc-swipe-caption">Swipe <strong>right</strong> if you got it · <strong>left</strong> to review</p>' +
     "</div>";
