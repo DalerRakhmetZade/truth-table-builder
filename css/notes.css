@@ -35,7 +35,16 @@
     gap: 12px 18px;
     margin: 8px 0 18px;
   }
-  .notes-head h2 { margin: 0; font-size: var(--text-heading); font-weight: 700; color: var(--ink); }
+  .notes-head h2 { margin: 0; font-size: var(--text-subheading); font-weight: 700; color: var(--ash); }
+
+  /* Builder section heading — align to the page gutters and read as a subtitle
+     under the app title, tied tightly to the description below it. */
+  #builder-view .notes-head {
+    max-width: var(--page-max-width);
+    margin: 2px auto 2px;
+    padding: 0 24px;
+  }
+  #builder-view .view-sub { margin-top: 0; }
   .notes-search {
     flex: 1 1 240px;
     max-width: 360px;
@@ -163,8 +172,8 @@
   @media (max-width: 700px) {
     #notes-view { padding: 4px 16px 32px; }
     .notes-head { margin: 4px 0 14px; }
-    .notes-head h2 { font-size: var(--text-heading-sm); }
     .notes-search { max-width: none; }
+    #builder-view .notes-head { padding: 0 16px; }
 
     /* Single-column tiles with a bit more breathing room to tap */
     .note-tiles { grid-template-columns: 1fr; }

@@ -255,7 +255,6 @@
 
   @media (max-width: 700px) {
     #flashcards-view { padding: 4px 16px 32px; }
-    .notes-head h2 { font-size: var(--text-heading-sm); }
 
     /* One column of decks; keep the "All cards" tile full width too */
     .fc-tiles { grid-template-columns: 1fr; }
