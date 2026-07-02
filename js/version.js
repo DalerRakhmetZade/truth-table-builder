@@ -2,10 +2,23 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.7.1";
+export const APP_VERSION = "1.8.0";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.8.0",
+    date: "2026-07-02",
+    changes: [
+      "Renamed the app to “Discrete Math Study Kit” — it’s now three tools in one: the Truth Table Builder, Study Notes, and the new Flashcards.",
+      "New “Flashcards” tab: pick a deck, then Study or take a graded Quiz.",
+      "Study is a real swipeable card deck — flip a card, then swipe right if you knew it or left to review; cards you miss come back until you clear them.",
+      "Quiz mode is auto-graded to a real 0–100% score, with a mastery message at 100% and a list of the cards you missed; your best score per deck is remembered.",
+      "Over 100 hand-written flashcards covering every Study Notes topic, from several angles (recognition, application, common mistakes, worked examples).",
+      "Study Notes now also cover Inference Rules, Direct Proofs, Predicates & Quantifiers, and Prenex Normal Form.",
+      "Mobile-first redesign with a bottom tab bar and bigger tap targets, so Notes and Flashcards feel great on a phone.",
+    ],
+  },
   {
     version: "1.7.1",
     date: "2026-06-29",

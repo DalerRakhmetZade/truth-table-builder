@@ -50,28 +50,6 @@
   }
   .notes-search:focus { border-color: var(--signal-blue); box-shadow: 0 0 0 3px rgba(37,118,235,0.12); }
 
-  .notes-layout { display: flex; gap: 28px; align-items: flex-start; }
-  .notes-toc {
-    flex: 0 0 200px;
-    position: sticky;
-    top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .toc-link {
-    font-size: 13px;
-    color: var(--fog);
-    text-decoration: none;
-    padding: 6px 10px;
-    border-radius: var(--radius-control);
-    border-left: 2px solid transparent;
-  }
-  .toc-link:hover { color: var(--ink); background: var(--paper); }
-  .toc-link.active { color: var(--signal-blue); border-left-color: var(--signal-blue); font-weight: 600; }
-
-  .notes-main { flex: 1 1 auto; min-width: 0; }
-
   /* group tiles (landing) */
   .note-tiles {
     display: grid;
@@ -182,14 +160,20 @@
 
   .notes-empty { color: var(--fog); font-size: 14px; padding: 20px 0; }
 
-  @media (max-width: 720px) {
-    .notes-layout { flex-direction: column; }
-    .notes-toc {
-      position: static;
-      flex-direction: row;
-      flex-wrap: wrap;
-      flex-basis: auto;
-    }
-    .toc-link { border-left: none; }
-    .toc-link.active { border-left: none; }
+  @media (max-width: 700px) {
+    #notes-view { padding: 4px 16px 32px; }
+    .notes-head { margin: 4px 0 14px; }
+    .notes-head h2 { font-size: var(--text-heading-sm); }
+    .notes-search { max-width: none; }
+
+    /* Single-column tiles with a bit more breathing room to tap */
+    .note-tiles { grid-template-columns: 1fr; }
+    .note-tile { padding: 16px; }
+
+    /* Bigger back hit area */
+    .notes-back { padding: 8px 0; font-size: 14px; }
+
+    /* Long formulas: let a too-wide chip scroll instead of overflowing the card */
+    .formula { max-width: 100%; overflow-x: auto; }
+    .note-map-row { grid-template-columns: auto auto 1fr; gap: 8px; }
   }

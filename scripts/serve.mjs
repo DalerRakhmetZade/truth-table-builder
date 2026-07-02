@@ -37,5 +37,5 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Truth Table Builder running at http://localhost:${port}`);
+  console.log(`Discrete Math Study Kit running at http://localhost:${port}`);
 });

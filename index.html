@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Truth Table Builder</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Discrete Math Study Kit</title>
 <link rel="stylesheet" href="css/tokens.css" />
 <link rel="stylesheet" href="css/base.css" />
 <link rel="stylesheet" href="css/layout.css" />
@@ -11,19 +11,24 @@
 <link rel="stylesheet" href="css/dialog.css" />
 <link rel="stylesheet" href="css/practice.css" />
 <link rel="stylesheet" href="css/notes.css" />
+<link rel="stylesheet" href="css/flashcards.css" />
 </head>
 <body>
 <header class="app">
   <div class="brand-text">
-    <h1>Truth Table Builder</h1>
+    <h1>Discrete Math Study Kit</h1>
   </div>
   <nav class="app-nav" id="appNav">
     <a href="#builder" class="nav-link" data-route="builder">Builder</a>
     <a href="#notes" class="nav-link" data-route="notes">Study Notes</a>
+    <a href="#flashcards" class="nav-link" data-route="flashcards">Flashcards</a>
   </nav>
 </header>
 
 <div id="builder-view">
+<div class="notes-head">
+  <h2>Truth Table Builder</h2>
+</div>
 <p class="view-sub">Set the variables, add expression columns, click cells to toggle, or type a proposition to <span class="nowrap">auto-fill</span> it.</p>
 
 <div class="controls">
@@ -61,25 +66,34 @@
   <p id="notes-empty" class="notes-empty" style="display:none;">No rules match your search.</p>
 </div>
 
+<div id="flashcards-view" hidden>
+  <div class="notes-head">
+    <h2>Flashcards</h2>
+  </div>
+  <div id="flashcards-content" class="fc-content"></div>
+</div>
+
 <footer class="app-footer">
   <button id="aboutBtn" class="version-btn" title="About &amp; version history">
-    Truth Table Builder <span id="versionLabel">v0.0.0</span>
+    Discrete Math Study Kit <span id="versionLabel">v0.0.0</span>
   </button>
 </footer>
 
 <dialog id="aboutDialog" class="about-dialog">
   <button class="dialog-close" id="aboutClose" aria-label="Close">✕</button>
-  <h2>Truth Table Builder <span id="aboutVersion" class="about-version"></span></h2>
+  <h2>Discrete Math Study Kit <span id="aboutVersion" class="about-version"></span></h2>
   <p class="about-desc">
-    A lightweight tool for building truth tables in discrete math — set your
-    variables, add expression columns, and let it auto-fill the T/F values.
+    A lightweight study kit for discrete math, with three tools: a
+    <strong>Truth Table Builder</strong> that auto-fills T/F values,
+    <strong>Study Notes</strong> for the core rules and algorithms, and
+    <strong>Flashcards</strong> to quiz yourself to mastery.
   </p>
   <p class="about-how">
     Operators: <code>¬ ∧ ∨ → ↔ ⊕</code> &nbsp;·&nbsp; or type ASCII
     <code>~ &amp; | -&gt; &lt;-&gt; ^</code>. Click a cell to toggle T / F / blank.
   </p>
   <div class="about-links">
-    <a href="https://truthtable.r-z.app/" target="_blank" rel="noopener">Live app</a>
+    <a href="https://dm.r-z.app/" target="_blank" rel="noopener">Live app</a>
     <a href="https://github.com/DalerRakhmetZade/truth-table-builder" target="_blank" rel="noopener">GitHub</a>
     <a href="https://github.com/DalerRakhmetZade/truth-table-builder/issues/new" target="_blank" rel="noopener">Report a bug / request a feature</a>
   </div>
@@ -103,6 +117,21 @@
   <div id="changelog" class="changelog"></div>
   <p class="about-credit">For CSCI S-20 and anyone learning logic. ✦</p>
 </dialog>
+
+<nav class="tabbar" id="mobileTabbar" aria-label="Sections">
+  <a href="#builder" class="nav-link tab" data-route="builder">
+    <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="20"/></svg>
+    <span class="tab-label">Builder</span>
+  </a>
+  <a href="#notes" class="nav-link tab" data-route="notes">
+    <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h11a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2z"/><line x1="8" y1="7" x2="14" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+    <span class="tab-label">Notes</span>
+  </a>
+  <a href="#flashcards" class="nav-link tab" data-route="flashcards">
+    <svg class="tab-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="16" height="12" rx="2"/><line x1="8" y1="18" x2="8" y2="6"/></svg>
+    <span class="tab-label">Cards</span>
+  </a>
+</nav>
 
 <script type="module" src="js/main.js"></script>
 </body>

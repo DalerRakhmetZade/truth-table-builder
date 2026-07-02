@@ -1,9 +1,9 @@
 {
-  "name": "truth-table-builder",
-  "version": "1.7.1",
+  "name": "discrete-math-study-kit",
+  "version": "1.8.0",
   "private": true,
   "type": "module",
-  "description": "A lightweight truth table builder with practice mode and auto-evaluation.",
+  "description": "A lightweight discrete-math study kit: truth table builder, study notes, and flashcards.",
   "scripts": {
     "start": "node scripts/serve.mjs",
     "test": "node --test 'tests/**/*.test.mjs'",

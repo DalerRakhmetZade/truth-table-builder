@@ -80,3 +80,11 @@
 
   .no-tables { line-height: 1.6; }
   .no-tables strong { color: var(--ink); font-weight: 700; }
+
+  @media (max-width: 700px) {
+    #tables { gap: 16px; }
+    .card-bar { padding: 14px 14px; gap: 8px 10px; }
+    .card-bar .title-input { min-width: 140px; flex-basis: 140px; }
+    .card-body { padding: 0 14px 14px; }
+    .card-warn { margin: 0 14px 12px; }
+  }

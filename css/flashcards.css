@@ -1,0 +1,267 @@
+/* Flashcards view: deck tiles, flip cards (Study), multiple-choice (Quiz),
+   and the score screen. Reuses the shared "Things" design tokens. */
+
+  #flashcards-view {
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    padding: 8px 24px 60px;
+  }
+  .fc-content { max-width: 760px; }
+
+  /* Hide the footer while a study/quiz session is active */
+  body.fc-session .app-footer { display: none; }
+
+  .fc-intro { color: var(--fog); font-size: 14px; line-height: 1.5; margin: 0 0 18px; }
+
+  /* deck tiles */
+  .fc-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-auto-rows: 1fr;
+    gap: 14px;
+  }
+  .fc-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+    background: var(--paper);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
+    padding: 18px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.12s, transform 0.05s;
+  }
+  .fc-tile.wide { grid-column: 1 / -1; }
+  .fc-tile:hover { border-color: var(--signal-blue); }
+  .fc-tile:active { transform: translateY(1px); }
+  .fc-tile-title { font-size: var(--text-subheading); font-weight: 700; color: var(--ink); }
+  .fc-tile-meta {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .fc-tile-count { font-size: 12px; font-weight: 600; color: var(--fog); }
+  .fc-best {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--signal-blue);
+    background: rgba(37, 118, 235, 0.1);
+    border-radius: var(--radius-pill);
+    padding: 2px 9px;
+  }
+  .fc-best.full { color: var(--true); background: var(--true-bg); }
+
+  /* back link + deck header */
+  .fc-back {
+    background: transparent; border: none; color: var(--signal-blue);
+    font-size: 13px; font-weight: 600; cursor: pointer; padding: 4px 0; margin-bottom: 12px;
+  }
+  .fc-back:hover { color: var(--signal-blue-deep); }
+  .fc-deck-head { margin-bottom: 18px; }
+  .fc-deck-title { margin: 0 0 4px; font-size: var(--text-heading-sm); font-weight: 700; color: var(--ink); }
+  .fc-deck-sub { margin: 0; color: var(--fog); font-size: 13px; }
+  .fc-deck-sub strong { color: var(--ink); }
+
+  /* mode picker */
+  .fc-mode-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .fc-mode-card {
+    display: flex; flex-direction: column; gap: 6px; text-align: left;
+    background: var(--paper); border: 1px solid var(--hairline);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-sm);
+    padding: 20px; cursor: pointer; font-family: inherit;
+    transition: border-color 0.12s, transform 0.05s;
+  }
+  .fc-mode-card:hover { border-color: var(--signal-blue); }
+  .fc-mode-card:active { transform: translateY(1px); }
+  .fc-mode-name { font-size: var(--text-subheading); font-weight: 700; color: var(--ink); }
+  .fc-mode-desc { font-size: 13px; color: var(--fog); line-height: 1.45; }
+
+  /* shared bars */
+  .fc-study-bar, .fc-quiz-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .fc-progress { font-size: 13px; font-weight: 600; color: var(--fog); }
+  .fc-mini {
+    background: var(--paper); border: 1px solid var(--hairline); border-radius: var(--radius-control);
+    color: var(--ash); font-size: 12px; font-weight: 600; padding: 5px 12px; cursor: pointer;
+    font-family: inherit;
+  }
+  .fc-mini:hover { border-color: var(--signal-blue); color: var(--signal-blue); }
+
+  /* study — swipeable flashcard deck */
+  .fc-stats { display: inline-flex; align-items: center; gap: 16px; }
+  .fc-stat { font-size: 18px; font-weight: 800; }
+  .fc-stat.cleared { color: var(--true); }
+  .fc-stat.review { color: #c07f1a; }
+
+  /* Center the card block lower in the available space */
+  .fc-study-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 260px);
+  }
+
+  .fc-swipe {
+    position: relative;
+    width: min(90vw, 600px);
+    aspect-ratio: 3 / 2;
+    margin: 8px auto 0;
+    perspective: 1200px;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .fc-card3d {
+    position: absolute; inset: 0;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4, 0.1, 0.2, 1);
+    cursor: pointer;
+    outline: none;
+  }
+  .fc-card3d.flipped { transform: rotateY(180deg); }
+  .fc-face {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; text-align: center;
+    background: var(--paper); border: 1px solid var(--hairline);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-sm);
+    padding: 28px 26px;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    overflow: auto;
+  }
+  .fc-face-back { transform: rotateY(180deg); }
+  .fc-card3d:focus-visible .fc-face { border-color: var(--signal-blue); box-shadow: 0 0 0 3px rgba(37,118,235,0.12); }
+  .fc-face-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--silver);
+  }
+  .fc-face-q { font-size: 20px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+  .fc-face-a { font-size: 20px; font-weight: 700; color: var(--signal-blue); line-height: 1.4; }
+  .fc-face-note { font-size: 13px; color: var(--fog); line-height: 1.5; max-width: 42ch; }
+  .fc-face-hint { font-size: 12px; color: var(--silver); }
+
+  /* Tinder-style swipe overlays (ride along with the card) */
+  .fc-swipe-overlay {
+    position: absolute; top: 18px; z-index: 3;
+    padding: 6px 14px; border: 2px solid; border-radius: var(--radius-control);
+    font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+    opacity: 0; pointer-events: none;
+  }
+  .fc-swipe-overlay.right { right: 18px; color: var(--true); border-color: var(--true); transform: rotate(10deg); }
+  .fc-swipe-overlay.left { left: 18px; color: var(--false); border-color: var(--false); transform: rotate(-10deg); }
+  .fc-swipe.swipe-right .fc-swipe-overlay.right { opacity: var(--swipe-progress, 0); }
+  .fc-swipe.swipe-left .fc-swipe-overlay.left { opacity: var(--swipe-progress, 0); }
+
+  .fc-swipe-caption { text-align: center; color: var(--fog); font-size: 13px; margin: 16px 0 0; }
+  .fc-swipe-caption strong { color: var(--ink); font-weight: 700; }
+
+  .fc-done-check {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--true-bg); color: var(--true); font-size: 30px; font-weight: 800;
+    margin-bottom: 4px;
+  }
+
+  /* study nav (used by the done screen's action row) */
+  .fc-study-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; gap: 12px; }
+  .fc-nav-btn {
+    background: var(--paper); border: 1px solid var(--hairline); border-radius: var(--radius-control);
+    color: var(--ink); font-size: 14px; font-weight: 600; padding: 9px 18px; cursor: pointer;
+    font-family: inherit; transition: border-color 0.12s, background 0.12s, color 0.12s;
+  }
+  .fc-nav-btn:hover:not(:disabled) { border-color: var(--signal-blue); color: var(--signal-blue); }
+  .fc-nav-btn:disabled { opacity: 0.45; cursor: default; }
+  .fc-nav-btn.primary { background: var(--signal-blue); border-color: var(--signal-blue); color: #fff; }
+  .fc-nav-btn.primary:hover { background: var(--signal-blue-deep); border-color: var(--signal-blue-deep); color: #fff; }
+
+  /* quiz */
+  .fc-qbar-track { height: 4px; background: var(--hairline); border-radius: var(--radius-pill); overflow: hidden; margin-bottom: 18px; }
+  .fc-qbar-fill { height: 100%; background: var(--signal-blue); transition: width 0.25s; }
+  .fc-question { font-size: 19px; font-weight: 600; color: var(--ink); line-height: 1.4; margin-bottom: 16px; }
+  .fc-options { display: flex; flex-direction: column; gap: 10px; }
+  .fc-option {
+    display: flex; align-items: center; gap: 12px; text-align: left; width: 100%;
+    background: var(--paper); border: 1px solid var(--hairline); border-radius: var(--radius-control);
+    padding: 14px 16px; cursor: pointer; font-family: inherit; font-size: 15px; color: var(--ink);
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .fc-option:hover:not(:disabled) { border-color: var(--signal-blue); }
+  .fc-option:disabled { cursor: default; }
+  .fc-opt-mark {
+    flex: 0 0 auto; width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--silver); transition: border-color 0.12s, background 0.12s;
+  }
+  .fc-opt-text { flex: 1; }
+  .fc-option.correct { border-color: var(--true); background: var(--true-bg); }
+  .fc-option.correct .fc-opt-mark { border-color: var(--true); background: var(--true); }
+  .fc-option.wrong { border-color: var(--false); background: var(--false-bg); }
+  .fc-option.wrong .fc-opt-mark { border-color: var(--false); background: var(--false); }
+  .fc-option.dim { opacity: 0.55; }
+
+  .fc-feedback {
+    margin-top: 14px; padding: 12px 14px; border-radius: var(--radius-control);
+    font-size: 13px; line-height: 1.5; color: var(--ink);
+  }
+  .fc-feedback.good { background: var(--true-bg); }
+  .fc-feedback.bad { background: var(--false-bg); }
+  .fc-feedback strong { color: var(--ink); }
+
+  /* score screen */
+  .fc-score {
+    display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+    background: var(--paper); border: 1px solid var(--hairline);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-sm);
+    padding: 32px 24px; margin-bottom: 18px;
+  }
+  .fc-score-pct { font-size: var(--text-display); font-weight: 800; color: var(--signal-blue); line-height: 1; }
+  .fc-score.full .fc-score-pct { color: var(--true); }
+  .fc-score.low .fc-score-pct { color: var(--false); }
+  .fc-score-sub { font-size: 14px; font-weight: 600; color: var(--fog); }
+  .fc-score-verdict { font-size: 14px; color: var(--ink); margin-top: 4px; }
+
+  .fc-missed { margin-bottom: 18px; }
+  .fc-missed-title { margin: 0 0 8px; font-size: var(--text-subheading); font-weight: 700; color: var(--ink); }
+  .fc-missed-row {
+    background: var(--paper); border: 1px solid var(--hairline); border-left: 3px solid var(--false);
+    border-radius: var(--radius-control); padding: 10px 14px; margin-bottom: 8px;
+  }
+  .fc-missed-q { font-size: 14px; color: var(--ink); margin-bottom: 3px; }
+  .fc-missed-a { font-size: 13px; font-weight: 600; color: var(--true); }
+  .fc-perfect { color: var(--true); font-weight: 600; font-size: 14px; margin-bottom: 18px; }
+
+  .fc-result-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 700px) {
+    #flashcards-view { padding: 4px 16px 32px; }
+    .notes-head h2 { font-size: var(--text-heading-sm); }
+
+    /* One column of decks; keep the "All cards" tile full width too */
+    .fc-tiles { grid-template-columns: 1fr; }
+    .fc-mode-pick { grid-template-columns: 1fr; }
+
+    /* Question + options sized and spaced for thumbs */
+    .fc-question { font-size: 18px; }
+    .fc-option { padding: 14px 14px; font-size: 15px; }
+    .fc-nav-btn { padding: 12px 18px; }
+
+    /* Study/quiz nav easy to reach; result actions stack full width */
+    .fc-study-nav { gap: 10px; }
+    .fc-result-actions { flex-direction: column; }
+    .fc-result-actions .fc-nav-btn { width: 100%; }
+
+    .fc-score-pct { font-size: 40px; }
+    .fc-back { padding: 8px 0; font-size: 14px; }
+
+    /* Swipe deck keeps real-card proportions (90% width via min(90vw, …)) */
+    .fc-face { padding: 24px 20px; }
+    .fc-face-q, .fc-face-a { font-size: 19px; }
+    .fc-study-body { min-height: calc(100dvh - 230px); }
+  }

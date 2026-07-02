@@ -1,9 +1,9 @@
-# Truth Table Builder
+# Discrete Math Study Kit
 
-**Live demo:** [Truth Table Builder](https://truthtable.r-z.app/)
+**Live demo:** [Discrete Math Study Kit](https://dm.r-z.app/)
 
-A lightweight truth table tool for discrete math. **No build step** and no
-runtime dependencies — plain ES modules and CSS.
+A lightweight discrete-math study kit — a truth table builder, study notes, and
+flashcards. **No build step** and no runtime dependencies — plain ES modules and CSS.
 
 ## Running it
 The app uses native ES modules, so it must be **served** (browsers block modules

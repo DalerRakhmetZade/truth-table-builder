@@ -6,6 +6,15 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.8.0] — 2026-07-02
+- Renamed the app to “Discrete Math Study Kit” — it’s now three tools in one: the Truth Table Builder, Study Notes, and the new Flashcards.
+- New “Flashcards” tab: pick a deck, then Study or take a graded Quiz.
+- Study is a real swipeable card deck — flip a card, then swipe right if you knew it or left to review; cards you miss come back until you clear them.
+- Quiz mode is auto-graded to a real 0–100% score, with a mastery message at 100% and a list of the cards you missed; your best score per deck is remembered.
+- Over 100 hand-written flashcards covering every Study Notes topic, from several angles (recognition, application, common mistakes, worked examples).
+- Study Notes now also cover Inference Rules, Direct Proofs, Predicates & Quantifiers, and Prenex Normal Form.
+- Mobile-first redesign with a bottom tab bar and bigger tap targets, so Notes and Flashcards feel great on a phone.
+
 ## [1.7.1] — 2026-06-29
 - Fixed: typing a variable in a column expression now matches no matter the case (e.g. P matches P, p, or an older lowercase-stored variable).
 - Older tables made before the uppercase update now have their variable names normalized to uppercase on load.
@@ -71,6 +80,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.8.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.8.0
 [1.7.1]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.7.1
 [1.7.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.7.0
 [1.6.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.6.0
