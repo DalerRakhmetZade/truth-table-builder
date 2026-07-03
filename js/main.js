@@ -24,6 +24,7 @@ function currentRoute() {
 }
 function applyRoute() {
   const route = currentRoute();
+  document.body.dataset.route = route;
   const builder = document.getElementById("builder-view");
   const notes = document.getElementById("notes-view");
   const flash = document.getElementById("flashcards-view");
