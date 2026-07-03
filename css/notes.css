@@ -83,6 +83,13 @@
   }
   .note-tile:hover { border-color: var(--signal-blue); }
   .note-tile:active { transform: translateY(1px); }
+  /* Module tiles read as the top level: subtle blue accent */
+  .note-tile.module-tile { border-left: 3px solid var(--signal-blue); }
+  .note-tile.disabled {
+    cursor: default; opacity: 0.6; border-left-color: var(--silver); box-shadow: none;
+  }
+  .note-tile.disabled:hover { border-color: var(--hairline); border-left-color: var(--silver); }
+  .note-tile.disabled .tile-count { color: var(--silver); font-style: italic; }
   .tile-title { font-size: var(--text-subheading); font-weight: 700; color: var(--ink); }
   .tile-blurb { font-size: 12px; color: var(--fog); line-height: 1.45; }
   .tile-count {

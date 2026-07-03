@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { NOTES } from "../js/notes-data.js";
+import { MODULES } from "../js/modules.js";
 
 test("NOTES is a non-empty array of well-formed sections", () => {
   assert.ok(Array.isArray(NOTES) && NOTES.length > 0);
@@ -9,6 +10,14 @@ test("NOTES is a non-empty array of well-formed sections", () => {
     assert.match(sec.id, /^[a-z0-9-]+$/, "id is a kebab anchor: " + sec.id);
     assert.equal(typeof sec.title, "string");
     assert.ok(Array.isArray(sec.cards) && sec.cards.length > 0, "section has cards: " + sec.id);
+  }
+});
+
+test("every section belongs to a defined module", () => {
+  const moduleIds = new Set(MODULES.map((m) => m.id));
+  for (const sec of NOTES) {
+    assert.equal(typeof sec.module, "string", sec.id + ": needs a module id");
+    assert.ok(moduleIds.has(sec.module), sec.id + ": module '" + sec.module + "' is not defined");
   }
 });
 

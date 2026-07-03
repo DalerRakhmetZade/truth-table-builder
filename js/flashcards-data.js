@@ -31,6 +31,7 @@
 export const FLASHCARDS = [
   {
     id: "logical-forms",
+    module: "m1",
     title: "Logical Forms",
     cards: [
       {
@@ -120,6 +121,7 @@ export const FLASHCARDS = [
 
   {
     id: "equivalence-laws",
+    module: "m1",
     title: "Equivalence Laws",
     cards: [
       {
@@ -279,6 +281,7 @@ export const FLASHCARDS = [
 
   {
     id: "inference-rules",
+    module: "m1",
     title: "Inference Rules",
     cards: [
       {
@@ -356,6 +359,7 @@ export const FLASHCARDS = [
 
   {
     id: "direct-proofs",
+    module: "m1",
     title: "Direct Proofs",
     cards: [
       {
@@ -474,6 +478,7 @@ export const FLASHCARDS = [
 
   {
     id: "proof-by-cases",
+    module: "m1",
     title: "Proof by Cases",
     cards: [
       {
@@ -539,6 +544,7 @@ export const FLASHCARDS = [
 
   {
     id: "proving-uniqueness",
+    module: "m1",
     title: "Proving Uniqueness",
     cards: [
       {
@@ -612,6 +618,7 @@ export const FLASHCARDS = [
 
   {
     id: "predicates-quantifiers",
+    module: "m1",
     title: "Predicates & Quantifiers",
     cards: [
       {
@@ -828,6 +835,7 @@ export const FLASHCARDS = [
 
   {
     id: "prenex-normal-form",
+    module: "m1",
     title: "Prenex Normal Form",
     cards: [
       {
@@ -920,6 +928,7 @@ export const FLASHCARDS = [
 
   {
     id: "dnf-cnf",
+    module: "m1",
     title: "DNF / CNF Conversion",
     cards: [
       {

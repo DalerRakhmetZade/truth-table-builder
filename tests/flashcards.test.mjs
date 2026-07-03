@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { FLASHCARDS } from "../js/flashcards-data.js";
+import { MODULES, moduleById, groupsByModule } from "../js/modules.js";
 import {
-  allCards, deckById, makeRng, shuffle, buildQuestion, buildQuiz, scoreQuiz,
+  allCards, moduleCards, deckById, makeRng, shuffle, buildQuestion, buildQuiz, scoreQuiz,
 } from "../js/quiz.js";
 
 test("FLASHCARDS is a non-empty array of well-formed groups", () => {
@@ -12,6 +13,34 @@ test("FLASHCARDS is a non-empty array of well-formed groups", () => {
     assert.equal(typeof g.title, "string");
     assert.ok(Array.isArray(g.cards) && g.cards.length > 0, "group has cards: " + g.id);
   }
+});
+
+test("every flashcard group belongs to a defined module", () => {
+  const moduleIds = new Set(MODULES.map((m) => m.id));
+  for (const g of FLASHCARDS) {
+    assert.equal(typeof g.module, "string", g.id + ": needs a module id");
+    assert.ok(moduleIds.has(g.module), g.id + ": module '" + g.module + "' is not defined");
+  }
+});
+
+test("modules are well-formed and groupsByModule buckets in order", () => {
+  assert.ok(Array.isArray(MODULES) && MODULES.length > 0);
+  for (const m of MODULES) {
+    assert.match(m.id, /^[a-z0-9-]+$/, "module id is a kebab anchor: " + m.id);
+    assert.equal(typeof m.title, "string");
+    assert.equal(moduleById(m.id).title, m.title);
+  }
+  const bucketed = groupsByModule(FLASHCARDS);
+  const flat = bucketed.reduce((n, e) => n + e.groups.length, 0);
+  assert.equal(flat, FLASHCARDS.length, "every group is bucketed exactly once");
+});
+
+test("deckById resolves module decks and rejects unknown modules", () => {
+  const m = MODULES[0].id;
+  const deck = deckById("mod:" + m);
+  assert.ok(deck && deck.cards.length > 0);
+  assert.equal(deck.cards.length, moduleCards(m).length);
+  assert.equal(deckById("mod:does-not-exist"), null);
 });
 
 test("group ids are unique", () => {

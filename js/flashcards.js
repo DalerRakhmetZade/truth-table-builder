@@ -1,8 +1,9 @@
-// Flashcards view. Landing shows deck tiles (one per group + an "All cards" deck).
-// Opening a deck offers two modes: Study (flip through cards) and Quiz (multiple
-// choice, auto-graded to a real percentage). Best quiz scores per deck are kept in
-// localStorage. Content comes from flashcards-data.js; quiz logic from quiz.js.
+// Flashcards view. Landing shows "All cards" plus a tile per module; opening a
+// module lists its topic decks (and a whole-module deck). Opening any deck offers
+// Study (swipe) or Quiz (graded). Best quiz scores per deck are kept in localStorage.
+// Content comes from flashcards-data.js; quiz logic from quiz.js; modules from modules.js.
 import { FLASHCARDS } from "./flashcards-data.js";
+import { MODULES, moduleById, modulesWithGroups } from "./modules.js";
 import { deckById, buildQuiz, scoreQuiz, makeRng, shuffle } from "./quiz.js";
 import { escapeHtml } from "./logic.js";
 
@@ -10,8 +11,9 @@ const BEST_KEY = "truthTableBuilder.flash.v1";
 const SWIPE_THRESHOLD = 90;
 
 let rootEl = null;
-// view: "landing" | "deck" | "study" | "studydone" | "quiz" | "result"
+// view: "landing" | "module" | "deck" | "study" | "studydone" | "quiz" | "result"
 let view = "landing";
+let activeModule = null;
 let deck = null;
 
 // study state (swipeable flashcard deck)
@@ -55,10 +57,12 @@ function recordBest(deckId, percent) {
 }
 
 /* --------------------------------- landing ------------------------------- */
-function deckList() {
-  const decks = FLASHCARDS.map((g) => ({ id: g.id, title: g.title, count: g.cards.length }));
-  const total = decks.reduce((n, d) => n + d.count, 0);
-  return [{ id: "all", title: "All cards", count: total, wide: true }, ...decks];
+function moduleEntries() {
+  return modulesWithGroups(FLASHCARDS).map((e) => ({
+    module: e.module,
+    groups: e.groups,
+    count: e.groups.reduce((n, g) => n + g.cards.length, 0),
+  }));
 }
 
 function tileHtml(d) {
@@ -66,10 +70,17 @@ function tileHtml(d) {
   const bestChip = best != null
     ? '<span class="fc-best' + (best === 100 ? " full" : "") + '">Best ' + best + "%</span>"
     : "";
-  return '<button class="fc-tile' + (d.wide ? " wide" : "") + '" data-deck="' + escapeHtml(d.id) + '">' +
+  const meta = d.metaLabel != null ? d.metaLabel
+    : d.count + (d.count === 1 ? " card" : " cards");
+  const disabled = !!d.disabled;
+  const attr = disabled ? " disabled"
+    : d.moduleId ? ' data-module="' + escapeHtml(d.moduleId) + '"'
+    : ' data-deck="' + escapeHtml(d.id) + '"';
+  return '<button class="fc-tile' + (d.wide ? " wide" : "") + (d.moduleId ? " fc-module-tile" : "") +
+      (disabled ? " disabled" : "") + '"' + attr + ">" +
     '<span class="fc-tile-title">' + escapeHtml(d.title) + "</span>" +
     '<span class="fc-tile-meta">' +
-      '<span class="fc-tile-count">' + d.count + (d.count === 1 ? " card" : " cards") + "</span>" +
+      '<span class="fc-tile-count">' + escapeHtml(meta) + "</span>" +
       bestChip +
     "</span>" +
   "</button>";
@@ -78,11 +89,45 @@ function tileHtml(d) {
 function renderLanding() {
   view = "landing";
   deck = null;
+  activeModule = null;
   setSession(false);
+  const entries = moduleEntries();
+  const total = entries.reduce((n, e) => n + e.count, 0);
+  const tiles = [{ id: "all", title: "All cards", count: total, wide: true }]
+    .map(tileHtml).join("") +
+    entries.map((e) => tileHtml({
+      moduleId: e.module.id, title: e.module.title, disabled: e.count === 0,
+      metaLabel: e.count === 0 ? "Coming soon"
+        : e.groups.length + (e.groups.length === 1 ? " topic" : " topics") + " · " + e.count + " cards",
+    })).join("");
   rootEl.innerHTML =
     '<p class="fc-intro">Pick a deck, then <strong>Study</strong> the cards or take a <strong>Quiz</strong>. ' +
     "Score 100% and you've got it cold.</p>" +
-    '<div class="fc-tiles">' + deckList().map(tileHtml).join("") + "</div>";
+    '<div class="fc-tiles">' + tiles + "</div>";
+}
+
+/* ------------------------------- module view ----------------------------- */
+function renderModule(id) {
+  const mod = moduleById(id);
+  const entry = moduleEntries().find((e) => e.module.id === id);
+  if (!mod || !entry) { renderLanding(); return; }
+  view = "module";
+  activeModule = id;
+  deck = null;
+  setSession(false);
+  const wholeTile = tileHtml({
+    id: "mod:" + id, title: "Whole module", wide: true,
+    metaLabel: entry.count + " cards · every topic",
+  });
+  const topicTiles = entry.groups.map((g) =>
+    tileHtml({ id: g.id, title: g.title, count: g.cards.length })).join("");
+  rootEl.innerHTML =
+    '<button class="fc-back" data-action="fc-home">← All decks</button>' +
+    '<div class="fc-deck-head">' +
+      '<h3 class="fc-deck-title">' + escapeHtml(mod.title) + "</h3>" +
+      (mod.blurb ? '<p class="fc-deck-sub">' + escapeHtml(mod.blurb) + "</p>" : "") +
+    "</div>" +
+    '<div class="fc-tiles">' + wholeTile + topicTiles + "</div>";
 }
 
 /* ------------------------------- deck menu ------------------------------- */
@@ -90,8 +135,10 @@ function renderDeckMenu() {
   view = "deck";
   setSession(false);
   const best = bestFor(deck.id);
+  const backAction = activeModule ? "fc-module" : "fc-home";
+  const backLabel = activeModule ? (moduleById(activeModule) && moduleById(activeModule).title) || "Back" : "All decks";
   rootEl.innerHTML =
-    '<button class="fc-back" data-action="fc-home">← All decks</button>' +
+    '<button class="fc-back" data-action="' + backAction + '">← ' + escapeHtml(backLabel) + "</button>" +
     '<div class="fc-deck-head">' +
       '<h3 class="fc-deck-title">' + escapeHtml(deck.title) + "</h3>" +
       '<p class="fc-deck-sub">' + deck.cards.length + " cards" +
@@ -417,7 +464,10 @@ function renderResult() {
 /* --------------------------------- events -------------------------------- */
 function onClick(e) {
   const tile = e.target.closest(".fc-tile");
-  if (tile) { deck = deckById(tile.dataset.deck); renderDeckMenu(); window.scrollTo(0, 0); return; }
+  if (tile) {
+    if (tile.dataset.module) { renderModule(tile.dataset.module); window.scrollTo(0, 0); return; }
+    deck = deckById(tile.dataset.deck); renderDeckMenu(); window.scrollTo(0, 0); return;
+  }
 
   // quiz option (study no longer uses options)
   const opt = e.target.closest(".fc-option");
@@ -426,7 +476,8 @@ function onClick(e) {
   const act = e.target.closest("[data-action]");
   if (!act) return;
   switch (act.dataset.action) {
-    case "fc-home": renderLanding(); break;
+    case "fc-home": renderLanding(); window.scrollTo(0, 0); break;
+    case "fc-module": if (activeModule) { renderModule(activeModule); window.scrollTo(0, 0); } else renderLanding(); break;
     case "fc-deck": renderDeckMenu(); break;
     case "fc-study": startStudy(); break;
     case "fc-quiz": startQuiz(); break;

@@ -44,6 +44,7 @@
 export const NOTES = [
   {
     id: "logical-forms",
+    module: "m1",
     title: "Logical Forms",
     blurb: "Starting from an implication P → Q.",
     cards: [
@@ -54,6 +55,7 @@ export const NOTES = [
   },
   {
     id: "equivalence-laws",
+    module: "m1",
     title: "Equivalence Laws",
     blurb: "The core rewriting rules. Many come in an ∧ form and an ∨ form.",
     cards: [
@@ -81,6 +83,7 @@ export const NOTES = [
   },
   {
     id: "inference-rules",
+    module: "m1",
     title: "Inference Rules",
     blurb: "Valid moves for reasoning forward: from the premises, conclude the result (⊢).",
     cards: [
@@ -94,6 +97,7 @@ export const NOTES = [
   },
   {
     id: "direct-proofs",
+    module: "m1",
     title: "Direct Proofs",
     blurb: "Reason straight from the givens to the conclusion — the workhorse strategy, driven by modus ponens and modus tollens.",
     tileLabel: "Checklist + strategies",
@@ -127,6 +131,7 @@ export const NOTES = [
   },
   {
     id: "proof-by-cases",
+    module: "m1",
     title: "Proof by Cases",
     blurb: "Split the domain into exhaustive cases, prove the claim in each, then conclude.",
     cards: [
@@ -157,6 +162,7 @@ export const NOTES = [
   },
   {
     id: "proving-uniqueness",
+    module: "m1",
     title: "Proving Uniqueness",
     blurb: "Show something exists AND that it's the only one: ∃!y. P(y).",
     cards: [
@@ -172,6 +178,7 @@ export const NOTES = [
   },
   {
     id: "predicates-quantifiers",
+    module: "m1",
     title: "Predicates & Quantifiers",
     blurb: "Statements about objects in a domain, and the ∀ / ∃ that range over them.",
     cards: [
@@ -216,6 +223,7 @@ export const NOTES = [
   },
   {
     id: "prenex-normal-form",
+    module: "m1",
     title: "Prenex Normal Form — the 4-step algorithm",
     blurb: "All quantifiers pulled to the front, leaving a quantifier-free body (the matrix). Apply the steps in order.",
     cards: [
@@ -245,6 +253,7 @@ export const NOTES = [
   },
   {
     id: "dnf-cnf",
+    module: "m1",
     title: "Converting to DNF / CNF — the 4-step algorithm",
     blurb: "Apply in order. Most conversions don't need all four steps, but in order they always reach a normal form.",
     cards: [

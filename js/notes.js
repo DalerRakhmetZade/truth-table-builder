@@ -1,14 +1,21 @@
-// Study Notes view. Default shows GROUP TILES (a clean gallery); click a tile to
-// drill into that group's rules. Typing in the search box shows matching rules
-// across all groups. Content comes from notes-data.js.
+// Study Notes view. Modules -> Topics -> cards. The landing shows MODULE tiles;
+// opening a module shows its topic tiles; opening a topic shows its cards. Typing
+// in the search box shows matching rules across ALL modules. Content comes from
+// notes-data.js; module metadata from modules.js.
 import { NOTES } from "./notes-data.js";
+import { MODULES, moduleById, modulesWithGroups } from "./modules.js";
 import { escapeHtml } from "./logic.js";
 
+let activeModule = null;
 let activeGroup = null;
 let query = "";
 let contentEl = null;
 let emptyEl = null;
 
+function groupsForModule(id) {
+  const entry = modulesWithGroups(NOTES).find((e) => e.module.id === id);
+  return entry ? entry.groups : [];
+}
 function equivRows(card) {
   return card.rows && card.rows.length ? card.rows : [{ lhs: card.lhs, rhs: card.rhs }];
 }
@@ -109,8 +116,35 @@ function tileHtml(sec) {
   "</button>";
 }
 
+function moduleTileHtml(entry) {
+  const n = entry.groups.length;
+  const empty = n === 0;
+  const meta = empty ? "Coming soon" : n + (n === 1 ? " topic" : " topics") + " →";
+  return '<button class="note-tile module-tile' + (empty ? " disabled" : "") + '"' +
+    (empty ? "" : ' data-module="' + escapeHtml(entry.module.id) + '"') +
+    (empty ? " disabled" : "") + ">" +
+    '<span class="tile-title">' + escapeHtml(entry.module.title) + "</span>" +
+    (entry.module.blurb ? '<span class="tile-blurb">' + escapeHtml(entry.module.blurb) + "</span>" : "") +
+    '<span class="tile-count">' + escapeHtml(meta) + "</span>" +
+  "</button>";
+}
+
 function renderLanding() {
-  contentEl.innerHTML = '<div class="note-tiles">' + NOTES.map(tileHtml).join("") + "</div>";
+  // The module list is the entry point — always shown, including empty modules.
+  const entries = modulesWithGroups(NOTES);
+  contentEl.innerHTML = '<div class="note-tiles">' + entries.map(moduleTileHtml).join("") + "</div>";
+  if (emptyEl) emptyEl.style.display = "none";
+}
+
+function renderModule(id) {
+  const mod = moduleById(id);
+  const groups = groupsForModule(id);
+  if (!mod || !groups.length) { activeModule = null; renderLanding(); return; }
+  contentEl.innerHTML =
+    '<button class="notes-back" data-action="notes-modules">← All modules</button>' +
+    '<h3 class="note-section-title">' + escapeHtml(mod.title) + "</h3>" +
+    (mod.blurb ? '<p class="note-section-blurb">' + escapeHtml(mod.blurb) + "</p>" : "") +
+    '<div class="note-tiles">' + groups.map(tileHtml).join("") + "</div>";
   if (emptyEl) emptyEl.style.display = "none";
 }
 
@@ -118,7 +152,8 @@ function renderDetail(id) {
   const sec = NOTES.find((s) => s.id === id);
   if (!sec) { renderLanding(); return; }
   contentEl.innerHTML =
-    '<button class="notes-back" data-action="notes-back">← All notes</button>' +
+    '<button class="notes-back" data-action="notes-back">← ' +
+      escapeHtml((moduleById(sec.module) && moduleById(sec.module).title) || "All notes") + "</button>" +
     '<section class="note-section">' +
       '<h3 class="note-section-title">' + escapeHtml(sec.title) + "</h3>" +
       (sec.blurb ? '<p class="note-section-blurb">' + escapeHtml(sec.blurb) + "</p>" : "") +
@@ -148,10 +183,12 @@ function rerender() {
   const q = query.trim().toLowerCase();
   if (q) renderResults(q);
   else if (activeGroup) renderDetail(activeGroup);
+  else if (activeModule) renderModule(activeModule);
   else renderLanding();
 }
 
 export function resetNotes() {
+  activeModule = null;
   activeGroup = null;
   query = "";
   const search = document.getElementById("notes-search");
@@ -166,10 +203,17 @@ export function initNotes() {
   if (!contentEl) return;
 
   contentEl.addEventListener("click", (e) => {
+    const moduleTile = e.target.closest(".module-tile");
+    if (moduleTile) {
+      if (moduleTile.classList.contains("disabled") || !moduleTile.dataset.module) return;
+      activeModule = moduleTile.dataset.module; activeGroup = null; rerender(); window.scrollTo(0, 0); return;
+    }
     const tile = e.target.closest(".note-tile");
     if (tile) { activeGroup = tile.dataset.group; rerender(); window.scrollTo(0, 0); return; }
+    const toModules = e.target.closest('[data-action="notes-modules"]');
+    if (toModules) { activeModule = null; activeGroup = null; rerender(); window.scrollTo(0, 0); return; }
     const back = e.target.closest('[data-action="notes-back"]');
-    if (back) { activeGroup = null; rerender(); return; }
+    if (back) { activeGroup = null; rerender(); window.scrollTo(0, 0); return; }
   });
 
   if (search) {

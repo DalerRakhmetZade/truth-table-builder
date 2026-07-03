@@ -11,9 +11,25 @@ export function allCards() {
   return out;
 }
 
+// Cards belonging to a module (groups tagged with that module id).
+export function moduleCards(moduleId) {
+  const out = [];
+  for (const g of FLASHCARDS) {
+    if (g.module !== moduleId) continue;
+    for (const c of g.cards) out.push({ ...c, groupId: g.id, groupTitle: g.title });
+  }
+  return out;
+}
+
 export function deckById(id) {
   if (id === "all") {
     return { id: "all", title: "All cards", cards: allCards() };
+  }
+  if (typeof id === "string" && id.indexOf("mod:") === 0) {
+    const moduleId = id.slice(4);
+    const cards = moduleCards(moduleId);
+    if (!cards.length) return null;
+    return { id: id, title: "Whole module", cards: cards };
   }
   const g = FLASHCARDS.find((x) => x.id === id);
   if (!g) return null;

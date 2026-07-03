@@ -2,10 +2,20 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.8.0";
+export const APP_VERSION = "1.9.0";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.9.0",
+    date: "2026-07-02",
+    changes: [
+      "Study Notes and Flashcards are now organized into Modules — the landing page lists your modules, and you drill in to a module to reach its topics.",
+      "Flashcards can be studied or quizzed at any scope: a single topic, a whole module, or all cards at once.",
+      "Added two new proof techniques — Proof by Cases and Proving Uniqueness — to both Notes and Flashcards.",
+      "Module 2 is set up as a “Coming soon” placeholder, ready for the next unit of material.",
+    ],
+  },
   {
     version: "1.8.0",
     date: "2026-07-02",

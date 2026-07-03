@@ -1,6 +1,6 @@
 {
   "name": "discrete-math-study-kit",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "private": true,
   "type": "module",
   "description": "A lightweight discrete-math study kit: truth table builder, study notes, and flashcards.",

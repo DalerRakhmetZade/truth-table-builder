@@ -6,6 +6,12 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.9.0] — 2026-07-02
+- Study Notes and Flashcards are now organized into Modules — the landing page lists your modules, and you drill in to a module to reach its topics.
+- Flashcards can be studied or quizzed at any scope: a single topic, a whole module, or all cards at once.
+- Added two new proof techniques — Proof by Cases and Proving Uniqueness — to both Notes and Flashcards.
+- Module 2 is set up as a “Coming soon” placeholder, ready for the next unit of material.
+
 ## [1.8.0] — 2026-07-02
 - Renamed the app to “Discrete Math Study Kit” — it’s now three tools in one: the Truth Table Builder, Study Notes, and the new Flashcards.
 - New “Flashcards” tab: pick a deck, then Study or take a graded Quiz.
@@ -80,6 +86,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.9.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.9.0
 [1.8.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.8.0
 [1.7.1]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.7.1
 [1.7.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.7.0
