@@ -177,8 +177,8 @@
     font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
     opacity: 0; pointer-events: none;
   }
-  .fc-swipe-overlay.right { right: 18px; color: var(--true); border-color: var(--true); transform: rotate(10deg); }
-  .fc-swipe-overlay.left { left: 18px; color: var(--false); border-color: var(--false); transform: rotate(-10deg); }
+  .fc-swipe-overlay.right { right: 18px; color: var(--false); border-color: var(--false); transform: rotate(10deg); }
+  .fc-swipe-overlay.left { left: 18px; color: var(--true); border-color: var(--true); transform: rotate(-10deg); }
   .fc-swipe.swipe-right .fc-swipe-overlay.right { opacity: var(--swipe-progress, 0); }
   .fc-swipe.swipe-left .fc-swipe-overlay.left { opacity: var(--swipe-progress, 0); }
 

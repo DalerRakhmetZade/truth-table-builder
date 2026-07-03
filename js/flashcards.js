@@ -184,8 +184,8 @@ function renderStudy() {
         '<button class="fc-mini" data-action="fc-shuffle">Shuffle</button>' +
       "</div>" +
       '<div class="fc-swipe" data-role="swipe">' +
-        '<div class="fc-swipe-overlay left">Review</div>' +
-        '<div class="fc-swipe-overlay right">Got it</div>' +
+        '<div class="fc-swipe-overlay left">Got it</div>' +
+        '<div class="fc-swipe-overlay right">Review</div>' +
         '<div class="fc-card3d' + (studyFlipped ? " flipped" : "") + '" ' +
           'tabindex="0" role="button" aria-label="Flip card">' +
           '<div class="fc-face fc-face-front">' +
@@ -197,7 +197,7 @@ function renderStudy() {
             '<span class="fc-face-tag">Answer</span>' +
             '<div class="fc-face-a">' + escapeHtml(card.a) + "</div>" +
             (card.note ? '<div class="fc-face-note">' + escapeHtml(card.note) + "</div>" : "") +
-            '<span class="fc-face-hint">← review · got it →</span>' +
+            '<span class="fc-face-hint">← got it · review →</span>' +
           "</div>" +
         "</div>" +
       "</div>" +
@@ -205,7 +205,7 @@ function renderStudy() {
         '<span class="fc-stat cleared" title="Cleared — you knew these">✓ ' + studyCleared + "</span>" +
         '<span class="fc-stat review" title="Waiting to come back">↻ ' + studyReview.size + "</span>" +
       "</div>" +
-      '<p class="fc-swipe-caption">Swipe <strong>right</strong> if you got it · <strong>left</strong> to review</p>' +
+      '<p class="fc-swipe-caption">Swipe <strong>left</strong> if you got it · <strong>right</strong> to review</p>' +
     "</div>";
 }
 
@@ -260,9 +260,10 @@ function flingCard(remembered, fromDx) {
   const el = rootEl.querySelector('[data-role="swipe"]');
   if (!el) { gradeCard(remembered); return; }
   studyBusy = true;
-  const dir = remembered ? 1 : -1;
+  // Left = got it (remembered), right = review.
+  const dir = remembered ? -1 : 1;
   const offX = dir * ((window.innerWidth || 600) + 120);
-  el.classList.add(remembered ? "swipe-right" : "swipe-left");
+  el.classList.add(remembered ? "swipe-left" : "swipe-right");
   el.style.setProperty("--swipe-progress", "1");
   // Start from wherever the finger left off, then continue off-screen.
   el.style.transition = "none";
@@ -333,7 +334,7 @@ function onPointerUp(e) {
   // Commit on release if dragged far enough OR flicked fast enough.
   const flicked = Math.abs(d.vx) > 0.5 && Math.abs(d.dx) > 24;
   if (Math.abs(d.dx) >= SWIPE_THRESHOLD || flicked) {
-    flingCard(d.dx > 0, d.dx);
+    flingCard(d.dx < 0, d.dx);
   } else {
     d.el.style.transition = "transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.2)";
     d.el.style.transform = "";
@@ -493,9 +494,9 @@ function onKey(e) {
   if (e.key === " " || e.key === "Enter") {
     if (e.target.closest("button")) return;
     e.preventDefault(); flipStudy();
-  } else if (e.key === "ArrowRight") {
-    flingCard(true);
   } else if (e.key === "ArrowLeft") {
+    flingCard(true);
+  } else if (e.key === "ArrowRight") {
     flingCard(false);
   }
 }
