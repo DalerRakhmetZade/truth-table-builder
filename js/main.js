@@ -38,3 +38,11 @@ function applyRoute() {
 }
 window.addEventListener("hashchange", applyRoute);
 applyRoute();
+
+/* --------------------- sticky header shadow on scroll -------------------- */
+const appHeader = document.querySelector("header.app");
+if (appHeader) {
+  const onScroll = () => appHeader.classList.toggle("stuck", window.scrollY > 4);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+}
