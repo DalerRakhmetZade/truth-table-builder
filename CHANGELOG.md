@@ -6,6 +6,11 @@ history (see the **About** dialog). The format is based on
 [Keep a Changelog](https://keepachangelog.com/), and the project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.10.0] — 2026-07-02
+- New “Proof Toolkit” module — a prerequisite reference of the theorems and lemmas you reach for while writing proofs.
+- Covers parity & divisibility, modular arithmetic (incl. Fermat’s Little Theorem), primes & GCD (Euclid’s Lemma, Bézout), rational vs irrational, summation formulas, inequalities, floor & ceiling, foundational principles, and counting & the Binomial Theorem.
+- 50 matching flashcards for the Proof Toolkit — study or quiz a single topic, the whole module, or everything at once.
+
 ## [1.9.0] — 2026-07-02
 - Study Notes and Flashcards are now organized into Modules — the landing page lists your modules, and you drill in to a module to reach its topics.
 - Flashcards can be studied or quizzed at any scope: a single topic, a whole module, or all cards at once.
@@ -86,6 +91,7 @@ history (see the **About** dialog). The format is based on
 - Copy any table as a plain-text grid; work auto-saves to your browser.
 - About dialog with version history.
 
+[1.10.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.10.0
 [1.9.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.9.0
 [1.8.0]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.8.0
 [1.7.1]: https://github.com/DalerRakhmetZade/truth-table-builder/releases/tag/v1.7.1

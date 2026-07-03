@@ -5,6 +5,11 @@
 // notes-data.js and flashcards-data.js with `module: "<id>"`.
 export const MODULES = [
   {
+    id: "toolkit",
+    title: "Proof Toolkit",
+    blurb: "Theorems & lemmas you invoke in proofs — a prerequisite reference.",
+  },
+  {
     id: "m1",
     title: "Module 1",
     blurb: "Logic, equivalences, inference, proofs, predicates & normal forms.",

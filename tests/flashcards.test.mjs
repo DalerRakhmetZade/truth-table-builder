@@ -36,10 +36,12 @@ test("modules are well-formed and groupsByModule buckets in order", () => {
 });
 
 test("deckById resolves module decks and rejects unknown modules", () => {
-  const m = MODULES[0].id;
-  const deck = deckById("mod:" + m);
+  // Use a module that actually has flashcard groups (order-independent).
+  const populated = MODULES.find((m) => FLASHCARDS.some((g) => g.module === m.id));
+  assert.ok(populated, "at least one module has flashcard groups");
+  const deck = deckById("mod:" + populated.id);
   assert.ok(deck && deck.cards.length > 0);
-  assert.equal(deck.cards.length, moduleCards(m).length);
+  assert.equal(deck.cards.length, moduleCards(populated.id).length);
   assert.equal(deckById("mod:does-not-exist"), null);
 });
 

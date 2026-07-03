@@ -150,6 +150,7 @@
   .equiv-sign { color: var(--signal-blue); font-weight: 800; font-size: 15px; }
   .infer-sep { color: var(--fog); font-weight: 600; margin: 0 -4px; }
 
+  .note-thm { margin: 4px 0 2px; }
   .note-map { display: flex; flex-direction: column; gap: 8px; }
   .note-map-row {
     display: grid;

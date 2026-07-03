@@ -35,6 +35,9 @@ function cardSearchText(card) {
       (card.rows || []).map((r) => r.from + " " + r.to).join(" ") + " " +
       (card.note || "")).toLowerCase();
   }
+  if (card.kind === "thm") {
+    return ((card.name || "") + " " + (card.statement || "") + " " + (card.note || "")).toLowerCase();
+  }
   const rows = equivRows(card).map((r) => r.lhs + " " + r.rhs).join(" ");
   return ((card.name || "") + " " + rows + " " + (card.note || "")).toLowerCase();
 }
@@ -58,6 +61,13 @@ function cardHtml(card) {
     return '<div class="note-card">' +
       (card.title ? '<div class="note-name">' + escapeHtml(card.title) + "</div>" : "") +
       '<div class="note-note">' + escapeHtml(card.body || "") + "</div>" +
+    "</div>";
+  }
+  if (card.kind === "thm") {
+    return '<div class="note-card">' +
+      '<div class="note-name">' + escapeHtml(card.name || "") + "</div>" +
+      (card.statement ? '<div class="note-thm"><code class="formula">' + escapeHtml(card.statement) + "</code></div>" : "") +
+      (card.note ? '<div class="note-note">' + escapeHtml(card.note) + "</div>" : "") +
     "</div>";
   }
   if (card.kind === "map") {

@@ -2,10 +2,19 @@
 // and the changelog renderer for the About dialog.
 import { escapeHtml } from "./logic.js";
 
-export const APP_VERSION = "1.9.0";
+export const APP_VERSION = "1.10.0";
 
 // Version history (newest first). Each entry: { version, date (YYYY-MM-DD), changes[] }.
 export const CHANGELOG = [
+  {
+    version: "1.10.0",
+    date: "2026-07-02",
+    changes: [
+      "New “Proof Toolkit” module — a prerequisite reference of the theorems and lemmas you reach for while writing proofs.",
+      "Covers parity & divisibility, modular arithmetic (incl. Fermat’s Little Theorem), primes & GCD (Euclid’s Lemma, Bézout), rational vs irrational, summation formulas, inequalities, floor & ceiling, foundational principles, and counting & the Binomial Theorem.",
+      "50 matching flashcards for the Proof Toolkit — study or quiz a single topic, the whole module, or everything at once.",
+    ],
+  },
   {
     version: "1.9.0",
     date: "2026-07-02",

@@ -62,6 +62,10 @@ test("every card has the required fields for its kind", () => {
           assert.equal(typeof r.from, "string");
           assert.equal(typeof r.to, "string");
         }
+      } else if (kind === "thm") {
+        assert.equal(typeof card.name, "string", sec.id + ": thm needs a name");
+        assert.equal(typeof card.statement, "string", sec.id + ": thm needs a statement");
+        assert.ok(card.statement.trim().length > 0, sec.id + ": thm statement is empty");
       } else {
         assert.fail("unknown card kind: " + kind);
       }
