@@ -473,6 +473,144 @@ export const FLASHCARDS = [
   },
 
   {
+    id: "proof-by-cases",
+    title: "Proof by Cases",
+    cards: [
+      {
+        id: "pc-method",
+        q: "What is the core idea of proof by cases?",
+        a: "Split the domain into exhaustive cases, prove the claim in each, then conclude",
+        distractors: [
+          "Assume the claim is false and derive a contradiction",
+          "Exhibit one example that satisfies the claim",
+          "Prove the contrapositive instead",
+        ],
+        note: "Every element must fall into at least one case.",
+      },
+      {
+        id: "pc-when",
+        q: "Proof by cases is especially natural when the antecedent is…",
+        a: "a disjunction — \"if A or B, then Q\"",
+        distractors: [
+          "a conjunction — \"if A and B, then Q\"",
+          "an existential — \"if some x has P\"",
+          "a single equation",
+        ],
+        note: "Prove Q assuming A, then prove Q assuming B.",
+      },
+      {
+        id: "pc-exhaustive",
+        q: "What does it mean for your cases to be \"exhaustive\"?",
+        a: "Every element of the domain falls into at least one case",
+        distractors: [
+          "The cases don't overlap",
+          "There are exactly two cases",
+          "Each case is easy to prove",
+        ],
+        note: "Proving it for only some cases doesn't prove the claim.",
+      },
+      {
+        id: "pc-missing-step",
+        q: "After proving the claim in every case, what must you still do?",
+        a: "Write a concluding sentence tying the cases together",
+        distractors: [
+          "Nothing — the last case finishes the proof",
+          "Prove the contrapositive",
+          "Find a counterexample",
+        ],
+        note: "\"Since the cases are exhaustive and the claim holds in each, the claim is proved.\"",
+      },
+      {
+        id: "pc-division-mod3",
+        q: "To prove a claim about divisibility by 3, the natural case split is…",
+        a: "n mod 3 = 0, 1, or 2",
+        distractors: ["even vs. odd", "positive vs. negative", "prime vs. composite"],
+        note: "The three residues mod 3 are exhaustive for the integers.",
+      },
+      {
+        id: "pc-parity",
+        q: "Which case split fits a claim that behaves differently for even and odd integers?",
+        a: "Even vs. odd",
+        distractors: ["n mod 3 = 0, 1, 2", "positive, negative, zero", "n, n+1, n+2"],
+        note: "Parity (even n = 2k, odd n = 2k+1) is exhaustive over the integers.",
+      },
+    ],
+  },
+
+  {
+    id: "proving-uniqueness",
+    title: "Proving Uniqueness",
+    cards: [
+      {
+        id: "pu-meaning",
+        q: "What does ∃!y. P(y) assert?",
+        a: "Existence AND uniqueness — at least one y works, and at most one does",
+        distractors: [
+          "Only existence — at least one y works",
+          "Only uniqueness — at most one y works",
+          "That P(y) holds for every y",
+        ],
+        note: "∃! packs two claims: something exists, and it's the only one.",
+      },
+      {
+        id: "pu-two-steps",
+        q: "A uniqueness proof (∃!y. P(y)) has which two steps?",
+        a: "Prove existence, then prove uniqueness",
+        distractors: [
+          "Prove existence twice",
+          "Prove the claim and its contrapositive",
+          "Split into cases and conclude",
+        ],
+        note: "Existence: exhibit a witness. Uniqueness: any two witnesses are equal.",
+      },
+      {
+        id: "pu-existence",
+        q: "How do you carry out the EXISTENCE step?",
+        a: "Exhibit a specific value and verify it satisfies P",
+        distractors: [
+          "Assume two values and show they're equal",
+          "Assume no value satisfies P and derive a contradiction",
+          "Let the value be arbitrary",
+        ],
+        note: "It's just a standard existential proof — produce a witness.",
+      },
+      {
+        id: "pu-uniqueness",
+        q: "How do you carry out the UNIQUENESS step?",
+        a: "Assume y₀ and y₁ both satisfy P, then show y₀ = y₁",
+        distractors: [
+          "Exhibit one value satisfying P",
+          "Show P fails for all other values one by one",
+          "Prove ∀y. P(y)",
+        ],
+        note: "If two things satisfy the property, they must be the same value.",
+      },
+      {
+        id: "pu-assume",
+        q: "In the uniqueness step, what are you allowed to assume?",
+        a: "That both y₀ and y₁ satisfy P(y)",
+        distractors: [
+          "That y₀ ≠ y₁",
+          "That only y₀ satisfies P",
+          "That P has no witnesses",
+        ],
+        note: "Assume P(y₀) and P(y₁), then derive y₀ = y₁.",
+      },
+      {
+        id: "pu-incomplete",
+        q: "A proof shows k = 4 satisfies k + 3 = 7 and stops. What's missing?",
+        a: "The uniqueness step — showing no other k works",
+        distractors: [
+          "The existence step",
+          "A concluding sentence only",
+          "Nothing — it's complete",
+        ],
+        note: "Existence alone doesn't establish ∃!; you must also show any such k equals 4.",
+      },
+    ],
+  },
+
+  {
     id: "predicates-quantifiers",
     title: "Predicates & Quantifiers",
     cards: [
