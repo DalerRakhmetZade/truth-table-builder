@@ -1,17 +1,18 @@
 /* Study Notes view: top nav, two-column layout (sticky TOC + content),
    rule cards, formula chips. Uses the shared design tokens. */
 
-  /* header nav (floats on the canvas, Things-style) */
-  .app-nav { display: flex; gap: 18px; margin-left: auto; }
+  /* header nav (floats on the canvas, Things-style pills) */
+  .app-nav { display: flex; gap: 4px; margin-left: auto; }
   .nav-link {
     font-size: var(--text-body);
     color: var(--ash);
     text-decoration: none;
-    padding: 4px 2px;
-    border-bottom: 2px solid transparent;
+    padding: 7px 15px;
+    border-radius: var(--radius-pill);
+    transition: background 0.12s, color 0.12s;
   }
-  .nav-link:hover { color: var(--ink); }
-  .nav-link.active { color: var(--signal-blue); border-bottom-color: var(--signal-blue); font-weight: 600; }
+  .nav-link:hover { color: var(--ink); background: var(--paper); }
+  .nav-link.active { color: var(--signal-blue); background: rgba(37, 118, 235, 0.1); font-weight: 600; }
 
   .view-sub {
     max-width: var(--page-max-width);
