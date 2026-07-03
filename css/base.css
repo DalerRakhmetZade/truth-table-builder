@@ -141,10 +141,20 @@
   a:hover { color: var(--signal-blue-deep); }
 
   /* ----- footer + version (quiet text link) ----- */
+  /* Footer only appears on the Builder (home) route, pinned to the bottom */
+  body:not([data-route="builder"]) .app-footer { display: none; }
+  body[data-route="builder"] {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  body[data-route="builder"] #builder-view { flex: 1 0 auto; }
+
   .app-footer {
     max-width: var(--page-max-width);
+    width: 100%;
     margin: 0 auto;
-    padding: 28px 24px 48px;
+    padding: 28px 24px 32px;
     text-align: center;
   }
   .version-btn {
