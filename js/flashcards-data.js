@@ -30,8 +30,30 @@
 
 export const FLASHCARDS = [
   {
+    id: "nt-intro",
+    module: "m2",
+    title: "Introduction to Number Theory",
+    cards: [
+      { id: "nt-intro-what", q: "Number theory is the study of…", a: "the integers and their structure (divisibility, primes, congruences)",
+        distractors: ["the real numbers and limits", "sets and functions in general", "logical connectives"],
+        note: "Foundational to cryptography, hashing, and algorithms." },
+      { id: "nt-intro-closure", q: "The integers ℤ are closed under which operations?", a: "addition, subtraction, and multiplication",
+        distractors: ["all four including division", "only addition", "multiplication and division"],
+        note: "3 / 2 isn't an integer — divisibility studies when division comes out even." },
+      { id: "nt-intro-divdef", q: "By definition, a | b means…", a: "b = a·k for some integer k",
+        distractors: ["a = b·k for some integer k", "a / b is an integer with remainder", "a and b share no factors"],
+        note: "a is a factor of b; b is a multiple of a." },
+      { id: "nt-intro-vocab", q: "If a | b, then b is called…", a: "a multiple of a",
+        distractors: ["a divisor of a", "a factor of a", "coprime to a"],
+        note: "And a is a divisor/factor of b." },
+      { id: "nt-intro-special", q: "Which statement is true for all integers n?", a: "1 | n and n | 0",
+        distractors: ["n | 1 for every n", "0 | n for every n", "n | n only when n is prime"],
+        note: "1 divides everything; every integer divides 0." },
+    ],
+  },
+  {
     id: "tk-parity-divisibility",
-    module: "toolkit",
+    module: "m2",
     title: "Parity & Divisibility",
     cards: [
       { id: "tk-pd-even-def", q: "Formally, an integer n is even when…", a: "n = 2k for some integer k",
@@ -58,8 +80,33 @@ export const FLASHCARDS = [
     ],
   },
   {
+    id: "nt-divisibility-template",
+    module: "m2",
+    title: "The Divisibility-Proof Template",
+    cards: [
+      { id: "nt-dt-step1", q: "The first step of a divisibility proof is to…", a: "introduce variables with their domains and state your assumptions",
+        distractors: ["immediately write the conclusion", "divide both sides by a", "guess a counterexample"],
+        note: "\"Let a, b, c be integers…\" plus the antecedent." },
+      { id: "nt-dt-unpack", q: "To \"unpack\" the hypothesis a | b, you write…", a: "b = a·m for some integer m",
+        distractors: ["b / a is an integer", "a = b·m for some integer m", "gcd(a, b) = 1"],
+        note: "Apply the definition of divides to get an equation with a fresh integer." },
+      { id: "nt-dt-nofrac", q: "In a divisibility proof you should never need…", a: "a fraction or a division sign",
+        distractors: ["a multiplication", "a new integer variable", "the definition of divides"],
+        note: "Divisibility works entirely through multiplication." },
+      { id: "nt-dt-closure", q: "After forming a witness like m·n, what must you justify?", a: "that m·n is an integer (closure)",
+        distractors: ["that m·n is prime", "that m·n is positive", "that m ≠ n"],
+        note: "The definition of divides requires an integer witness." },
+      { id: "nt-dt-repackage", q: "You've shown c = a·(m·n) with m·n ∈ ℤ. You conclude…", a: "a | c",
+        distractors: ["c | a", "a | (m·n)", "gcd(a, c) = m·n"],
+        note: "Repackage the equation using the definition of divides." },
+      { id: "nt-dt-newvars", q: "Every new variable you introduce in the proof must…", a: "be properly defined — where it comes from and its domain",
+        distractors: ["be a prime number", "appear in the conclusion", "be positive"],
+        note: "Undefined variables make the proof invalid." },
+    ],
+  },
+  {
     id: "tk-division-modular",
-    module: "toolkit",
+    module: "m2",
     title: "Division & Modular Arithmetic",
     cards: [
       { id: "tk-dm-qrt", q: "The Division Theorem writes a = dq + r (d > 0) with…", a: "0 ≤ r < d, and q, r unique",
@@ -81,7 +128,7 @@ export const FLASHCARDS = [
   },
   {
     id: "tk-primes-gcd",
-    module: "toolkit",
+    module: "m2",
     title: "Primes, GCD & Factorization",
     cards: [
       { id: "tk-pg-euclid", q: "Euclid's Lemma: if p is prime and p | ab, then…", a: "p | a or p | b",

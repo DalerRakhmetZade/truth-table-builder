@@ -46,8 +46,25 @@
 
 export const NOTES = [
   {
+    id: "nt-intro",
+    module: "m2",
+    title: "Introduction to Number Theory",
+    blurb: "What we study, and the definition that starts it all: divides.",
+    cards: [
+      { kind: "text", title: "What is number theory?",
+        body: "The study of the integers ℤ = {…, −2, −1, 0, 1, 2, …} and their structure — divisibility, primes, factorization, and congruences. It's foundational in computer science: cryptography (RSA), hashing, error-correcting codes, and algorithm analysis all rest on it." },
+      { kind: "text", title: "The integers are closed under + − ×",
+        body: "Add, subtract, or multiply two integers and you get an integer. They are NOT closed under division: 3 / 2 is not an integer. Number theory is largely about when division does work out evenly — that's divisibility." },
+      { kind: "thm", name: "Definition of divides",
+        statement: "a | b  ⟺  b = a·k for some integer k  (a ≠ 0)",
+        note: "Read \"a divides b.\" Then a is a divisor/factor of b, and b is a multiple of a. Example: 3 | 12 since 12 = 3·4; but 3 ∤ 7." },
+      { kind: "text", title: "Vocabulary",
+        body: "If a | b: a is a factor (or divisor) of b, and b is a multiple of a. \"a ∤ b\" means a does not divide b. Note every integer divides 0, and 1 divides every integer." },
+    ],
+  },
+  {
     id: "tk-parity-divisibility",
-    module: "toolkit",
+    module: "m2",
     title: "Parity & Divisibility",
     blurb: "The workhorses of integer proofs.",
     cards: [
@@ -67,8 +84,32 @@ export const NOTES = [
     ],
   },
   {
+    id: "nt-divisibility-template",
+    module: "m2",
+    title: "The Divisibility-Proof Template",
+    blurb: "A reliable recipe for direct proofs about divisibility.",
+    cards: [
+      { kind: "text", title: "The idea",
+        body: "Most direct proofs about divisibility follow the same five steps: set up your variables, unpack each divisibility hypothesis into an equation, do algebra, repackage the result using the definition of divides, and state the conclusion." },
+      { kind: "step", n: 1, title: "Set up",
+        detail: "Introduce your variables with their domains (\"Let a, b, c be integers…\") and state what you're assuming — the antecedent of the implication." },
+      { kind: "step", n: 2, title: "Unpack the definitions",
+        detail: "For each divisibility hypothesis like a | b, apply the definition to get an equation with a fresh integer: \"there exists m ∈ ℤ such that b = a·m.\"",
+        examples: [ { from: "a | b", to: "b = a·m,  m ∈ ℤ" } ] },
+      { kind: "step", n: 3, title: "Algebraic manipulation",
+        detail: "Use substitution, factoring, and arithmetic to transform these equations toward the form you need for the conclusion. No fractions — everything is multiplication." },
+      { kind: "step", n: 4, title: "Repackage using the definition",
+        detail: "Identify the integer witness the definition requires, verify it's actually an integer (closure!), and write the divisibility statement.",
+        examples: [ { from: "c = a·(m·n),  m·n ∈ ℤ", to: "a | c" } ] },
+      { kind: "step", n: 5, title: "State the conclusion",
+        detail: "Explicitly say what you've shown — e.g. \"Therefore a | c.\"" },
+      { kind: "text", title: "Key reminders",
+        body: "You should never need a fraction or division sign — divisibility works entirely through multiplication. Every new variable (like m, n) must be defined: where it comes from and its domain. And closure matters: when you form a quantity like m·n, say why it's an integer." },
+    ],
+  },
+  {
     id: "tk-division-modular",
-    module: "toolkit",
+    module: "m2",
     title: "Division & Modular Arithmetic",
     blurb: "Quotients, remainders, and congruences.",
     cards: [
@@ -91,7 +132,7 @@ export const NOTES = [
   },
   {
     id: "tk-primes-gcd",
-    module: "toolkit",
+    module: "m2",
     title: "Primes, GCD & Factorization",
     blurb: "The building blocks of the integers.",
     cards: [

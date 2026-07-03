@@ -17,7 +17,7 @@ export const MODULES = [
   {
     id: "m2",
     title: "Module 2",
-    blurb: "Coming soon.",
+    blurb: "Number theory — divisibility, modular arithmetic, primes & factorization.",
   },
 ];
 
