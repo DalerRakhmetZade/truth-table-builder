@@ -19,6 +19,11 @@ export const MODULES = [
     title: "Module 2",
     blurb: "Number theory — divisibility, modular arithmetic, primes & factorization.",
   },
+  {
+    id: "m3",
+    title: "Module 3",
+    blurb: "Proof techniques — contradiction, contrapositive & induction.",
+  },
 ];
 
 export function moduleById(id) {
